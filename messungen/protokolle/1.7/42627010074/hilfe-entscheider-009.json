@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 6346,
+ "stop_reason": "end_turn",
+ "session_id": "b44ea1ab-3714-4428-b52b-d59a9321c725",
+ "total_cost_usd": 0.022110499999999998,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 3951,
+  "cache_read_input_tokens": 2125,
+  "output_tokens": 609,
+  "output_tokens_details": {
+   "thinking_tokens": 425
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 3951,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 609,
+    "cache_read_input_tokens": 2125,
+    "cache_creation_input_tokens": 3951,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 3951
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 609,
+   "cacheReadInputTokens": 2125,
+   "cacheCreationInputTokens": 3951,
+   "webSearchRequests": 0,
+   "costUSD": 0.022110499999999998,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 425,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 3951,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\":\"phase_fertig\",\"antwort\":\"\",\"naechste_phase\":\"Block 1\",\"anzahl_fragen\":0,\"unvorhergesehen\":false,\"aenderungswunsch_gesendet\":false,\"freigabe\":\"keine\",\"notiz\":\"PO hat T002 (F01) übergeben und beendet den Thread wegen knappen Budgets, stellt keine Frage; Block 1 geht mit einem neuen PO-Thread weiter (T003), F02 ist noch nicht auf main, daher kein Ä1.\"}",
+ "ttft_ms": 5375,
+ "type": "result",
+ "duration_ms": 6625,
+ "uuid": "93d131c1-fd84-42b0-baed-c975946fba39",
+ "ttft_stream_ms": 1780,
+ "time_to_request_ms": 287,
+ "first_content_frame_ms": 1780,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 8.2
+}

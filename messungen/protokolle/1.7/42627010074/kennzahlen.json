@@ -1,0 +1,35 @@
+{
+ "version": "1.7",
+ "lauf": "42627010074",
+ "repository": "kassenbuch-1-7-42627010074",
+ "datum": "2026-11-09",
+ "claude_code": "2.1.319 (Claude Code)",
+ "vorlage_commit": "588905c2c20776ace08fd056e7ce2ca8aca917b9",
+ "tokens": 8913950,
+ "kosten_usd": 10.32,
+ "kosten_rollen": {
+  "Koordinator": 0.23,
+  "PO": 10.09
+ },
+ "hilfskosten_usd": 1.06,
+ "schritte": 78,
+ "sitzungen": 6,
+ "aktive_minuten": 45,
+ "limit_wartezeit_min": 240,
+ "rueckfragen": 10,
+ "unvorhergesehen": 7,
+ "abgelehnte_berechtigungen": 0,
+ "aenderungswunsch_gesendet": true,
+ "manuelle_pruefung": null,
+ "abbruch": "Kostenbremse: Projekt-Sitzungen über 10.0 USD",
+ "audit": {
+  "regeln_erfuellt": 18,
+  "regeln_gesamt": 25,
+  "aufgaben": 9,
+  "erstdurchlauf_prozent": 75,
+  "qa_runden": 5,
+  "echte_befunde": 1,
+  "tests": 231,
+  "ci_gruen": true
+ }
+}

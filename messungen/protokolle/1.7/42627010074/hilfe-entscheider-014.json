@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 5784,
+ "stop_reason": "end_turn",
+ "session_id": "0685522f-0776-474a-b11b-0309ac560bd9",
+ "total_cost_usd": 0.0236385,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 4593,
+  "cache_read_input_tokens": 2125,
+  "output_tokens": 505,
+  "output_tokens_details": {
+   "thinking_tokens": 308
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 4593,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 505,
+    "cache_read_input_tokens": 2125,
+    "cache_creation_input_tokens": 4593,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4593
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 505,
+   "cacheReadInputTokens": 2125,
+   "cacheCreationInputTokens": 4593,
+   "webSearchRequests": 0,
+   "costUSD": 0.0236385,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 308,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 4593,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\":\"antworten\",\"antwort\":\"Entscheide nach bestem Ermessen und vermerke es im Designdokument.\",\"naechste_phase\":null,\"anzahl_fragen\":5,\"unvorhergesehen\":true,\"aenderungswunsch_gesendet\":false,\"freigabe\":\"keine\",\"notiz\":\"Fünf Detailfragen zu Ä1 stehen nicht in den Regeln und führen zu keiner neuen Rolle, Klasse oder personenbezogenen Daten, daher die Standardantwort für Ermessensentscheidungen.\"}",
+ "ttft_ms": 5306,
+ "type": "result",
+ "duration_ms": 6066,
+ "uuid": "0a37249b-23f5-4885-a4f7-3bb446ad7323",
+ "ttft_stream_ms": 2408,
+ "time_to_request_ms": 281,
+ "first_content_frame_ms": 2408,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 7.5
+}

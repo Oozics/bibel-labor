@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 19107,
+ "stop_reason": "end_turn",
+ "session_id": "5e4a4709-b8ee-4051-969b-cb0d164db7df",
+ "total_cost_usd": 0.0201705,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 4176,
+  "cache_read_input_tokens": 2125,
+  "output_tokens": 325,
+  "output_tokens_details": {
+   "thinking_tokens": 143
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 4176,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 325,
+    "cache_read_input_tokens": 2125,
+    "cache_creation_input_tokens": 4176,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4176
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 325,
+   "cacheReadInputTokens": 2125,
+   "cacheCreationInputTokens": 4176,
+   "webSearchRequests": 0,
+   "costUSD": 0.0201705,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 143,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 4176,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\": \"antworten\", \"antwort\": \"Entscheide nach bestem Ermessen und vermerke es im Designdokument.\", \"naechste_phase\": null, \"anzahl_fragen\": 1, \"unvorhergesehen\": true, \"aenderungswunsch_gesendet\": false, \"freigabe\": \"keine\", \"notiz\": \"Rückfrage zu Block 1 oder Block 2 steht nicht in den Regeln, daher die Standardantwort; F02 ist noch nicht auf main, daher kein Ä1.\"}",
+ "ttft_ms": 18376,
+ "type": "result",
+ "duration_ms": 19386,
+ "uuid": "2a5b56ac-dca6-4254-af8a-cb17b96c45ca",
+ "ttft_stream_ms": 17181,
+ "time_to_request_ms": 288,
+ "first_content_frame_ms": 17181,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 20.9
+}

@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 4931,
+ "stop_reason": "end_turn",
+ "session_id": "bf891252-d1d0-4472-a6f8-b3acf32f5912",
+ "total_cost_usd": 0.0217245,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 4157,
+  "cache_read_input_tokens": 2125,
+  "output_tokens": 488,
+  "output_tokens_details": {
+   "thinking_tokens": 279
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 4157,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 488,
+    "cache_read_input_tokens": 2125,
+    "cache_creation_input_tokens": 4157,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4157
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 488,
+   "cacheReadInputTokens": 2125,
+   "cacheCreationInputTokens": 4157,
+   "webSearchRequests": 0,
+   "costUSD": 0.0217245,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 279,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 4157,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\":\"antworten\",\"antwort\":\"Entscheide nach bestem Ermessen und vermerke es im Designdokument.\",\"naechste_phase\":null,\"anzahl_fragen\":1,\"unvorhergesehen\":true,\"aenderungswunsch_gesendet\":false,\"freigabe\":\"keine\",\"notiz\":\"Rolle bat um Weiter und fragte, ob kleine Klarstellungen weiter nach eigenem Ermessen gelten; nicht in den Regeln, daher Standardantwort. F02 ist noch nicht auf main, Ä1 wird noch nicht gesendet.\"}",
+ "ttft_ms": 3914,
+ "type": "result",
+ "duration_ms": 5214,
+ "uuid": "1a366808-4cb5-4a9e-b8fd-3315f425237f",
+ "ttft_stream_ms": 2060,
+ "time_to_request_ms": 292,
+ "first_content_frame_ms": 2061,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 6.7
+}
