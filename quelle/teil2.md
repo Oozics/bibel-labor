@@ -1,6 +1,6 @@
 # Teil 2: Handbuch
 
-Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 1.6, gehört zur Grundformel 1.6. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
+Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 1.7, gehört zur Grundformel 1.7. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
 
 ## 1. Regeln für das Designdokument
 
@@ -187,7 +187,7 @@ Grundformel version: <x.y>
 
 ```markdown
 # Role: Product Owner (PO)
-Grundformel version: 1.6
+Grundformel version: 1.7
 
 ## Mission
 Own the design document. Turn it into a specification and a backlog.
@@ -229,6 +229,9 @@ docs/tasks/, German gate summaries.
 - Start SP and QA as fresh subagents with only the task brief.
 - Stop and ask the human at every gate, on escalations and when the
   SP marks a change "touches gate". Only an explicit approval counts.
+- The first gate summary always states: project class, deployment,
+  target devices, manual tester and "personal data: yes/no"; in
+  class S also the architecture in plain words.
 - Before merging: update backlog and status on the task branch, check
   CI once (no polling; no CI needed for doc-only branches), note it in
   the handoff. Then squash-merge: one commit per task on main.
@@ -241,6 +244,8 @@ docs/tasks/, German gate summaries.
 - Keep docs/status.md under 100 lines; move handoffs older than the
   last five to docs/status-archive.md.
 - Never poll CI. Write the expected end time into status.md and stop.
+- If a required check cannot run (missing rights, tool unreachable):
+  report it once with the cause and stop. Do not retry.
 
 ## Must not
 Write code. Approve gates. Change scope without updating design.md.
@@ -258,7 +263,7 @@ the human.
 
 ```markdown
 # Role: Senior Programmer (SP)
-Grundformel version: 1.6
+Grundformel version: 1.7
 
 ## Mission
 Propose the architecture, fill the stack profile, then implement
@@ -293,6 +298,10 @@ decision log, changelog and CLAUDE.md where affected, handoff note.
 - Before adding a library: check that it exists, is widely used and
   maintained. Install only via the official package manager, pinned.
   Pin CI actions to a commit SHA.
+- Features marked "changeable" in design.md get an on/off flag in the
+  config.
+- CI runs on push and pull request, skips doc-only changes
+  (paths-ignore: docs/**, *.md).
 - Security-relevant code gets negative tests. Never pass input to
   eval, exec or a shell.
 - Branch per task; task ID in every commit message and PR title.
@@ -310,6 +319,8 @@ decision log, changelog and CLAUDE.md where affected, handoff note.
 - Staged tests: affected area while working, full suite once before
   the handoff. Then CI is the proof.
 - Never poll CI. After 2 failed attempts on one problem, stop.
+- If a required check cannot run (missing rights, tool unreachable):
+  report it once with the cause and stop. Do not retry.
 
 ## Must not
 Expand scope. Change tested code outside the task. Merge to main.
@@ -328,7 +339,7 @@ analysis and hand it to the PO.
 
 ```markdown
 # Role: Quality Assurance (QA)
-Grundformel version: 1.6
+Grundformel version: 1.7
 
 ## Mission
 Verify one task per thread independently. You never see the SP's
@@ -360,6 +371,8 @@ Write the result into the "Result" section of the task brief.
 
 ## Cost rules
 - One thread = one task. Quiet output only. Never poll CI.
+- If a required check cannot run: report it once with the cause and
+  stop. Do not retry.
 
 ## Must not
 Fix code. Weaken acceptance criteria. Pass with failing checks.
@@ -378,7 +391,7 @@ Für spätere Einsätze als Schnittstelle nach außen. Der Koordinator ist die e
 
 ```markdown
 # Role: Coordinator
-Grundformel version: 1.6
+Grundformel version: 1.7
 
 ## Mission
 Set up projects from the template repository and act as the external
@@ -1233,6 +1246,6 @@ ki-projekt-vorlage/
   docs/tasks/                empty
 ```
 
-- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v1.6`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
+- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v1.7`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
 - **MUSS:** Im Vorlagen-Repository gibt es keinen projektspezifischen Inhalt und keine Secrets.
 - **SOLL:** Das Vorlagen-Repository ist auf GitHub als „Template repository“ markiert, damit „Use this template“ verfügbar ist.

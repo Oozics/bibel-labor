@@ -308,6 +308,7 @@ Ein Thread sendet bei **jedem** Arbeitsschritt (jeder Nachricht, jedem Werkzeuga
 - **MUSS:** Erst planen, dann am Stück umsetzen. Kein Ausprobieren in Einzelschritten.
 - **MUSS:** Zusammengehörige Befehle in einem Werkzeugaufruf bündeln (z. B. Formatieren, Linten und Testen zusammen).
 - **MUSS:** Nach zwei erfolglosen Versuchen am selben Problem wird nicht weiter probiert. Die Rolle analysiert die Ursache und meldet an den PO.
+- **MUSS:** Kann eine Rolle eine nötige Prüfung nicht durchführen (fehlende Rechte, Werkzeug nicht erreichbar), meldet sie das einmal mit Ursache und stoppt. Sie versucht es nicht erneut und umgeht es nicht.
 - **MUSS:** Niemand fragt die CI oder andere laufende Vorgänge in Schleifen ab. Wer wartet, schreibt eine Statuszeile mit geschätzter Endzeit in `status.md` und beendet seinen Schritt; die nächste Einheit prüft das Ergebnis einmal.
 - **MUSS:** Der Projektstart ist Übernehmen, nicht Abschreiben: Alles Allgemeine kommt fertig aus dem Vorlagen-Repository (Abschnitt 5).
 
@@ -349,10 +350,11 @@ Die Grundformel ist versioniert und wird nur bewusst geändert.
 - Jedes Projekt vermerkt in seiner Kontextdatei die verwendete Version.
 - Abweichungen in einem einzelnen Projekt nur mit Eintrag im Entscheidungslog.
 - Wiederkehrende Probleme aus Projekten werden über den Koordinator als Änderungsvorschlag eingebracht; der Mensch entscheidet.
-- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v1.6`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
+- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v1.7`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
 
 **Versionsgeschichte**
 
+- **1.7** (9. November 2026): Auswertung eines weiteren Projektlaufs. Was die Rollen bei jedem Schritt brauchen, steht jetzt auch in ihren Rollendateien: Pflichtinhalt der ersten Freigabe, Schalter für änderbare Funktionen, CI ohne Doku-Läufe. Neue Regel: Eine Prüfung, die nicht möglich ist, wird einmal gemeldet, dann stoppt die Rolle.
 - **1.6** (9. November 2026): Abgleich mit bestehenden Leitfäden (Claude-Code-Dokumentation, OpenSSF). Automatische Gedächtnisfunktion des Werkzeugs abgeschaltet; Regeln technisch absichern, Hook für knappe Testausgaben; Sicherheitsregeln für Abhängigkeiten, CI-Bausteine und Negativtests; automatisches Weiterlaufen nach dem Limit erlaubt.
 - **1.5** (2. November 2026): Auswertung eines kleinen Projekts mit Bibel 1.4, das nach rund 12 USD vor der ersten Programmzeile abgebrochen wurde. Projektklassen S, M, L mit passendem Ablauf (Abschnitt 4); Projektstart aus einem Vorlagen-Repository statt Abschreiben aus dem PDF; Handbuch nur noch gezielt nachschlagen, kompakte Rollendateien; optionale Rollen erst ab Klasse M; stärkstes Modell für alle Rollen, fest in den Projekteinstellungen; keine Verbrauchszeilen mehr in Übergaben; Push vor jeder Übergabe; Adapter für die Claude-App.
 - **1.4** (1. November 2026): Auswertung des Solitaire-Pilots. Kurzlebige Threads statt Dauer-Threads, Kontext-Budget, neuer Abschnitt 13 „Kosten und Kontext“, QA-Prüfstufen, Obergrenze für `status.md`, Regel für erneute Freigabe 2, frühe Entscheidung über Bereitstellung, Release-Aufgabe `REL`, Anleitung für die manuelle Prüfung.

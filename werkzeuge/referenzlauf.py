@@ -29,6 +29,7 @@ CALL_TIMEOUT_S = 45 * 60          # Part 3 §6: safety net per session call
 LIMIT_SLEEP_S = 15 * 60           # wait between retries when the usage limit is reached
 MAX_ROUNDS_PER_PHASE = 15
 MAX_PHASES = 10
+STUCK_REPEATS = 3                 # identical client answers in a row = the role is stuck
 HELPER_MODEL = "sonnet"           # Decider answers, manual tester and report text (not part of the measurement)
 ENV_DROP = ["CLAUDE_CODE_SESSION_ID", "CLAUDE_CODE_REMOTE_SESSION_ID", "CLAUDE_CODE_CHILD_SESSION"]
 
@@ -383,6 +384,7 @@ Antworte am Ende NUR mit JSON:
         """One thread: start, answer until the phase is done. Returns the next phase."""
         session = str(uuid.uuid4())
         message = self.role(role, phase, first_prompt, session, resume=False)
+        recent: list[str] = []
         for rounds in range(MAX_ROUNDS_PER_PHASE):
             if self.over_budget():
                 return None
@@ -396,6 +398,11 @@ Antworte am Ende NUR mit JSON:
                 if decision.get("aktion") == "phase_fertig":
                     return decision.get("naechste_phase") or "Ende"
             answer = decision.get("antwort") or "Bitte mach weiter."
+            recent.append(" ".join(answer.lower().split()))
+            if len(recent) >= STUCK_REPEATS and len(set(recent[-STUCK_REPEATS:])) == 1:
+                self.stopped_reason = (f"{role} {phase}: steckt fest, der Entscheider gab {STUCK_REPEATS}-mal "
+                                       f"dieselbe Antwort („{answer[:80]}“)")
+                return None
             message = self.role(role, phase, answer, session, resume=True)
         self.stopped_reason = self.stopped_reason or f"{role} {phase}: keine Einigung nach {MAX_ROUNDS_PER_PHASE} Runden"
         return None
@@ -540,7 +547,7 @@ def update_results(path: Path, m: dict) -> None:
         r[col] = values.get(r[0], r[col])
     table = ["| " + " | ".join(header) + " |", "| " + " | ".join("---" for _ in header) + " |"]
     table += ["| " + " | ".join(r) + " |" for r in rows]
-    path.write_text("\n".join(before + table + after) + "\n", encoding="utf-8")
+    path.write_text("\n".join(before + table + after) + "\n", encoding="utf-8", newline="\n")
 
 
 def write_report(out: Path, m: dict, audit_text: str, parts: dict, previous: dict) -> None:
@@ -567,7 +574,7 @@ def write_report(out: Path, m: dict, audit_text: str, parts: dict, previous: dic
     lines += ["", "Die Prüfung lief automatisch. Ein Mensch sollte die Verständlichkeit der Anleitung mit einer "
               "10-Minuten-Stichprobe bestätigen.", "", "## 7. Empfehlungen für die nächste Bibel-Version", "",
               parts.get("empfehlungen", "–"), ""]
-    (out / "bericht.md").write_text("\n".join(lines), encoding="utf-8")
+    (out / "bericht.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
     (out / "kennzahlen.json").write_text(json.dumps(m, ensure_ascii=False, indent=1, default=list), encoding="utf-8")
 
 

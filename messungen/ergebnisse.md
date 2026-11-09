@@ -2,7 +2,7 @@
 
 Eine Spalte pro Lauf, neue Läufe rechts (Teil 3, Abschnitt 10).
 
-| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 1.6 |
+| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 1.6 (abgebrochen) |
 | --- | --- | --- |
 | Datum | 1.–2. Nov. 2026 | 2026-11-09 |
 | Claude-Code-Version | 2.1.302 | 2.1.319 (Claude Code) |

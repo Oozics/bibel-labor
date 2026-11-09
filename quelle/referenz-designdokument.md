@@ -1,6 +1,6 @@
 # Designdokument: Kassenbuch
 
-Version: 1.0 · Status: Entwurf · Grundformel-Version: 1.6
+Version: 1.0 · Status: Entwurf · Grundformel-Version: 1.7
 Projektklasse: S
 
 ## 1. Zweck und Problem

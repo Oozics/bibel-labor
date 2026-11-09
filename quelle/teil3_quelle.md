@@ -16,14 +16,14 @@ Der Lauf läuft auf einem Windows-Rechner von GitHub Actions. Das Python-Skript 
 | **SP, QA** | nein | Werden vom PO als Subagenten gestartet, wie in jedem Projekt |
 | **Auditor** | ja | Frische, unabhängige Sitzung am Ende, nur mit Leserechten; prüft das Repository gegen R1 bis R25 |
 
-**Ablage:** Alles, was zur Messung gehört, liegt im privaten Repository `bibel-labor`: die Quelltexte der Bibel (`quelle/`), die Werkzeuge (`werkzeuge/`) sowie Ergebnisgeschichte, Protokolle und Prüfberichte (`messungen/`). Das Projekt jedes Laufs ist ein eigenes privates Repository, z. B. `kassenbuch-1-6-<Laufnummer>`. Die Projekt-Sitzungen arbeiten nur in ihrem Projektordner und sehen `bibel-labor` nie. Die Hilfsaufrufe (Entscheider, manueller Prüfer, Auditor, Berichtstext) zählen nicht zur Kostenschätzung des Projekts; ihre Kosten stehen getrennt im Bericht.
+**Ablage:** Alles, was zur Messung gehört, liegt im privaten Repository `bibel-labor`: die Quelltexte der Bibel (`quelle/`), die Werkzeuge (`werkzeuge/`) sowie Ergebnisgeschichte, Protokolle und Prüfberichte (`messungen/`). Das Projekt jedes Laufs ist ein eigenes privates Repository, z. B. `kassenbuch-1-7-<Laufnummer>`. Die Projekt-Sitzungen arbeiten nur in ihrem Projektordner und sehen `bibel-labor` nie. Die Hilfsaufrufe (Entscheider, manueller Prüfer, Auditor, Berichtstext) zählen nicht zur Kostenschätzung des Projekts; ihre Kosten stehen getrennt im Bericht.
 
 ## 2. Regeln für vergleichbare Läufe
 
 Ein Lauf ist nur vergleichbar, wenn sich zwischen zwei Läufen nur die Bibel ändert.
 
 - **Gleiches Designdokument:** immer das aus Abschnitt 4, unverändert. Nur die Zeile „Grundformel-Version“ wird angepasst.
-- **Gleiche Vorlage:** das Vorlagen-Repository im Stand der gemessenen Version (z. B. Tag `v1.6`); der Bericht nennt die Commit-Kennung der Vorlage.
+- **Gleiche Vorlage:** das Vorlagen-Repository im Stand der gemessenen Version (z. B. Tag `v1.7`); der Bericht nennt die Commit-Kennung der Vorlage.
 - **Kein Wissen über den Test:** Koordinator, PO, SP und QA sehen nie Teil 3, den Messordner oder ein Wort über Messung. Der Entscheider antwortet wie ein Auftraggeber, nie mit Regelnummern, Drehbuch oder Kennzahlen.
 - **Gleiche Entscheidungen:** Der Entscheider antwortet wörtlich nach Abschnitt 5, zum vorgesehenen Zeitpunkt. Jede seiner Entscheidungen steht im Protokoll (`entscheidungen.jsonl`).
 - **Gleiche Umgebung:** Windows-Rechner von GitHub Actions, derselbe Workflow, gleiche Claude-Code-Version wenn möglich (steht im Bericht), Modell aus den Projekteinstellungen, gleiche Berechtigungseinstellung. Abweichungen stehen im Bericht.
@@ -130,7 +130,7 @@ Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Er sendet ihn, s
 **Einmalige Einrichtung (etwa 15 Minuten)**
 
 1. **Abo-Schlüssel:** Auf deinem Rechner `claude setup-token` ausführen und den angezeigten Schlüssel in `bibel-labor` unter *Settings → Secrets and variables → Actions* als Secret `CLAUDE_CODE_OAUTH_TOKEN` speichern. Damit laufen alle Aufrufe über dein Abo.
-2. **GitHub-Schlüssel:** Unter *GitHub → Settings → Developer settings → Fine-grained tokens* einen Token anlegen: Eigentümer dein Konto, Zugriff auf alle Repositories, Rechte *Administration*, *Contents* und *Workflows* jeweils mit Lesen und Schreiben. Als Secret `BIBEL_GH_TOKEN` speichern. Damit legt der Lauf das Projekt-Repository an, und die Rollen können pushen.
+2. **GitHub-Schlüssel:** Unter *GitHub → Settings → Developer settings → Fine-grained tokens* einen Token anlegen: Eigentümer dein Konto, Zugriff auf alle Repositories, Rechte *Administration*, *Contents* und *Workflows* jeweils mit Lesen und Schreiben, dazu *Actions* und *Commit statuses* nur Lesen (ohne sie sieht der PO nicht, ob die CI grün ist). Als Secret `BIBEL_GH_TOKEN` speichern. Damit legt der Lauf das Projekt-Repository an, und die Rollen können pushen.
 3. **Vorlage:** Das Vorlagen-Repository ist als „Template repository“ markiert und enthält die zu messende Version auf `main`.
 
 **Start:** In `bibel-labor` unter *Actions → Referenzlauf → Run workflow*. Eingaben: Version (leer = aktuelle Version), Kostenbremse für den ganzen Lauf (Standard 10 USD), Berechtigungsmodus (Standard `auto`; `bypassPermissions` nur, wenn `auto` nicht verfügbar ist, denn der Rechner von GitHub wird nach dem Lauf gelöscht).
@@ -150,7 +150,7 @@ Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Er sendet ihn, s
 
 **Limit:** Erreicht ein Aufruf das Nutzungslimit, wartet das Skript jeweils 15 Minuten und versucht es erneut, insgesamt höchstens 4 Stunden. Die Wartezeit zählt nicht zur Laufzeit; das Erreichen des Limits steht im Bericht.
 
-**Sicherheitsnetz:** Ein Aufruf, der länger als 45 Minuten läuft, wird beendet. Eine Phase, die nach 15 Antworten nicht abgeschlossen ist, oder mehr als 10 Phasen beenden den Lauf. Abgelehnte Berechtigungen werden nicht umgangen, sondern gezählt. Außer bei der Einrichtung ändert das Skript nie Dateien im Projekt.
+**Sicherheitsnetz:** Ein Aufruf, der länger als 45 Minuten läuft, wird beendet. Gibt der Entscheider dreimal hintereinander dieselbe Antwort, steckt die Rolle fest; das Skript beendet den Lauf mit dieser Meldung. Ebenso eine Phase, die nach 15 Antworten nicht abgeschlossen ist, oder mehr als 10 Phasen. Abgelehnte Berechtigungen werden nicht umgangen, sondern gezählt. Außer bei der Einrichtung ändert das Skript nie Dateien im Projekt.
 
 **Probelauf ohne Kosten:** `python werkzeuge/referenzlauf.py --owner test --dry-run` mit einer Attrappe für `claude` (Umgebungsvariable `CLAUDE_BIN`) prüft den Ablauf lokal, ohne GitHub und ohne Tokens.
 
@@ -220,7 +220,7 @@ Der Bericht ist auf Deutsch, für einen Leser ohne Entwicklerwissen. Ablage: `me
 
 Die Datei `messungen/ergebnisse.md` hält alle Läufe fest: eine Spalte pro Lauf, neue Läufe rechts. Das Skript nimmt die letzte gültige Spalte als Vergleichswert und trägt den neuen Lauf ein.
 
-| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 1.6 |
+| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 1.7 |
 | --- | --- | --- |
 | Datum | 1.–2. Nov. 2026 | |
 | Claude-Code-Version | 2.1.302 | |
