@@ -16,8 +16,8 @@ Referenzlaufs). Kein Projekt und keine Projekt-Sitzung darf dieses Repository se
 
 1. Texte in `quelle/` ändern, Version und Datum in `quelle/version.json` anpassen, Versionsgeschichte in Teil 1 ergänzen.
 2. Pushen. Der Workflow **Selbsttest** prüft Verweise, Versionen, Vorlage und Hooks und baut die PDFs (unter *Actions* zum Herunterladen).
-3. Vorlage erzeugen: `python werkzeuge/vorlage.py ../ki-projekt-vorlage`, dort auf einem Zweig committen, Pull Request mergen, Release mit Tag `v<Version>` anlegen.
-4. Referenzlauf starten (unten) und den Prüfbericht lesen.
+3. *Actions → Vorlage veröffentlichen → Run workflow*. Der Workflow prüft die Bibel, erzeugt die Vorlage, bringt sie auf `main` von `ki-projekt-vorlage`, legt das Release `v<Version>` an und startet auf Wunsch gleich den Referenzlauf.
+4. Den Prüfbericht lesen.
 
 ## Referenzlauf
 

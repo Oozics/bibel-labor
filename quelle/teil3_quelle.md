@@ -131,7 +131,7 @@ Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Er sendet ihn, s
 
 1. **Abo-Schlüssel:** Auf deinem Rechner `claude setup-token` ausführen und den angezeigten Schlüssel in `bibel-labor` unter *Settings → Secrets and variables → Actions* als Secret `CLAUDE_CODE_OAUTH_TOKEN` speichern. Damit laufen alle Aufrufe über dein Abo.
 2. **GitHub-Schlüssel:** Unter *GitHub → Settings → Developer settings → Fine-grained tokens* einen Token anlegen: Eigentümer dein Konto, Zugriff auf alle Repositories, Rechte *Administration*, *Contents* und *Workflows* jeweils mit Lesen und Schreiben, dazu *Actions* und *Commit statuses* nur Lesen (ohne sie sieht der PO nicht, ob die CI grün ist). Als Secret `BIBEL_GH_TOKEN` speichern. Damit legt der Lauf das Projekt-Repository an, und die Rollen können pushen.
-3. **Vorlage:** Das Vorlagen-Repository ist als „Template repository“ markiert und enthält die zu messende Version auf `main`.
+3. **Vorlage:** Das Vorlagen-Repository ist als „Template repository“ markiert. Die zu messende Version bringt der Workflow *Vorlage veröffentlichen* auf `main`, samt Release `v<Version>`; mit der Option „Danach den Referenzlauf starten“ folgt der Lauf automatisch.
 
 **Start:** In `bibel-labor` unter *Actions → Referenzlauf → Run workflow*. Eingaben: Version (leer = aktuelle Version), Kostenbremse für den ganzen Lauf (Standard 10 USD), Berechtigungsmodus (Standard `auto`; `bypassPermissions` nur, wenn `auto` nicht verfügbar ist, denn der Rechner von GitHub wird nach dem Lauf gelöscht).
 
