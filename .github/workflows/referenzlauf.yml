@@ -23,6 +23,7 @@ concurrency:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   lauf:
@@ -70,3 +71,14 @@ jobs:
         with:
           name: messung
           path: messungen/
+
+  bericht-starten:
+    needs: lauf
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Bericht-Workflow starten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run bericht.yml --repo "$GITHUB_REPOSITORY" --ref main -f run_id="$GITHUB_RUN_ID"

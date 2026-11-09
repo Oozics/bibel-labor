@@ -1,13 +1,11 @@
 name: Bericht
 
 # Turns the measurement data of a reference run into the PDF report and
-# stores both in bibel-labor. Runs after every reference run; can also be
-# started by hand for an earlier run.
+# stores both in bibel-labor. Can also be started by hand for an earlier run.
 
+# Started by the last job of the reference run (a workflow_run trigger does
+# not fire when the run itself was started by another workflow).
 on:
-  workflow_run:
-    workflows: ["Referenzlauf"]
-    types: [completed]
   workflow_dispatch:
     inputs:
       run_id:
@@ -24,11 +22,10 @@ permissions:
 
 jobs:
   bericht:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion != 'skipped'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      RUN_ID: ${{ inputs.run_id || github.event.workflow_run.id }}
+      RUN_ID: ${{ inputs.run_id }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
         with:
