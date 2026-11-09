@@ -340,13 +340,16 @@ Hinweise:
         return decision
 
     def manual_test(self) -> dict:
-        target = self.work / "manuell"
-        shutil.rmtree(target, ignore_errors=True)
+        # A fresh folder per test: on Windows, rmtree often fails on read-only git files.
+        target = self.work / f"manuell-{int(time.time())}"
         run(["git", "clone", "-q", str(self.project), str(target)], self.work)
         t0 = time.time()
         prompt = """Du bist eine Person ohne Entwicklerkenntnisse und prüfst ein Programm nach einer Anleitung.
 Lies docs/manual-test.md und tu genau das, was dort steht, Schritt für Schritt, nicht mehr. Befehle für
-PowerShell führst du mit `powershell -NoProfile -Command "<Befehl>"` aus. Wenn ein Schritt nicht wie beschrieben
+PowerShell führst du so aus, damit Umlaute und das Euro-Zeichen so ankommen wie in einem normalen Fenster:
+`powershell -NoProfile -Command "[Console]::OutputEncoding=[Text.Encoding]::UTF8; $env:PYTHONIOENCODING='utf-8'; <Befehl>"`.
+Der Ordner, in dem du bist, ist schon das heruntergeladene und entpackte Projekt. Schritte zum Herunterladen,
+Entpacken und Öffnen des Fensters gelten als erledigt; prüfe bei ihnen nur, ob sie verständlich beschrieben sind. Wenn ein Schritt nicht wie beschrieben
 funktioniert oder Wissen voraussetzt, das in der Anleitung fehlt, notiere ihn und mach mit dem nächsten weiter.
 Antworte am Ende NUR mit JSON:
 {"schritte_gesamt": n, "problematische_schritte": [{"nr": n, "grund": "..."}],
@@ -398,6 +401,8 @@ Antworte am Ende NUR mit JSON:
             action = decision.get("aktion")
             if action == "phase_fertig":
                 return decision.get("naechste_phase") or "Ende"
+            if action == "manuelle_pruefung" and role == "PO" and not self.ae1_sent:
+                return "Change"  # the client brings the change request before the release
             if action == "manuelle_pruefung":
                 self.manual_test()
                 decision = self.decide(role, phase, message, rounds)
@@ -419,7 +424,7 @@ Antworte am Ende NUR mit JSON:
         for _ in range(MAX_PHASES):
             if not phase or phase == "Ende" or self.over_budget():
                 break
-            if phase == "Release" and not self.ae1_sent:
+            if phase in ("Release", "Ende") and not self.ae1_sent:
                 phase = "Change"  # the change request always comes before the release
             if phase == "Change" and self.ae1_sent:
                 phase = "Release"
@@ -554,6 +559,8 @@ def update_results(path: Path, m: dict) -> None:
     if col == -1 or filled:
         header.append(title if col == -1 else f"{title} (Lauf {m['lauf']})")
         col = len(header) - 1
+    if m.get("abbruch") and "abgebrochen" not in header[col]:
+        header[col] += " (abgebrochen)"
     values = column_values(m)
     for r in rows:
         while len(r) < len(header):

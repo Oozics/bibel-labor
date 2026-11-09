@@ -110,7 +110,7 @@ Delete the _handover folder after you have taken it over.
 
 **PO, Umsetzung**
 
-Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Sind F01 und F02 auf `main` und hat die laufende PO-Sitzung geendet, startet das Skript eine neue PO-Sitzung für die Phase „Change“; deren erste Nachricht ist:
+Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Sind F01 und F02 auf `main` und hat die laufende PO-Sitzung geendet, spätestens aber, wenn der PO um die manuelle Prüfung oder Freigabe 3 bittet, startet das Skript eine neue PO-Sitzung für die Phase „Change“; deren erste Nachricht ist:
 
 > **Ä1:** „Zwei Änderungen: Den CSV-Export brauchen wir nicht mehr, bitte F02 vollständig entfernen. Außerdem sollen die Daten künftig in einer SQLite-Datei statt in JSON gespeichert werden; vorhandene JSON-Daten müssen beim ersten Start automatisch übernommen werden.“
 
@@ -140,7 +140,7 @@ Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Sind F01 und F02
 1. **Einrichtung:** Projekt-Repository aus der Vorlage anlegen und klonen, Designdokument nach `_handover/` legen.
 2. **Koordinator:** neue Sitzung mit dem Startprompt aus dem Handbuch des Projekts (`docs/handbook/04-coordinator-start.md`) und den Zusatzangaben aus Abschnitt 5. Der Entscheider beantwortet jede Nachricht, bis der Koordinator fertig ist.
 3. **PO pro Phase:** für jede Phase bzw. jeden Block eine neue Sitzung mit dem PO-Startprompt (`docs/templates/thread-start.md`). Der Entscheider beantwortet jede Nachricht und meldet, wann eine Phase fertig ist und welche folgt.
-4. **Änderung:** Sind F01 und F02 auf `main`, startet das Skript eine neue PO-Sitzung für die Phase „Change“ und sendet Ä1 als erste Nachricht.
+4. **Änderung:** Sind F01 und F02 auf `main`, spätestens bei der Bitte um die manuelle Prüfung, startet das Skript eine neue PO-Sitzung für die Phase „Change“ und sendet Ä1 als erste Nachricht.
 5. **Release:** Bittet der PO um die manuelle Prüfung oder Freigabe 3, startet das Skript den manuellen Prüfer in einer Kopie von `main`. Danach entscheidet der Entscheider über Freigabe 3.
 6. **Auswertung:** Auditor-Sitzung mit dem Prompt aus Abschnitt 8, nur mit Leserechten.
 7. **Bericht:** Kennzahlen exakt aus dem Protokoll, Regeltreue vom Auditor, die Texte für Ergebnis, Kostentreiber, Auffälligkeiten und Empfehlungen von einem kurzen Claude-Aufruf. Das Skript schreibt `bericht.md` und trägt den Lauf in `ergebnisse.md` ein. Nach dem Lauf erzeugt der Workflow *Bericht* die PDF und speichert alles in `bibel-labor`; er lässt sich für einen Lauf auch von Hand starten (Eingabe: Lauf-Nummer).
