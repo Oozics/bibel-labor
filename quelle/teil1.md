@@ -245,7 +245,10 @@ Die KI schreibt und führt die Tests aus; *was* getestet wird, bestimmen die fre
 | --- | --- | --- |
 | **A** | Doku, Konfiguration, reine Umbenennungen | CI grün prüfen, Diff lesen |
 | **B** (Standard) | Normale Funktionen | Gezielte Proben: Randfälle, Feature tatsächlich entfernen, Regelwerk |
-| **C** | Benutzeroberfläche, kritische Logik (Geld, Personendaten, Sicherheit), Release | Wie B, dazu Mutationsproben, frischer Klon, volle Suite und End-to-End-Tests |
+| **C** | Benutzeroberfläche, kritische Logik (Geld, Personendaten, Sicherheit), Release | Wie B, dazu Mutationsproben an der kritischen Logik, die der Brief nennt, frischer Klon, volle Suite und End-to-End-Tests |
+
+- **MUSS:** Eine Nachprüfung (nach Befunden oder nach einer zurückgegebenen Freigabe) prüft nur die Änderung seit der letzten Prüfung. Betrifft sie nur Doku oder Konfiguration, gilt Stufe A; sonst die Stufe der Aufgabe.
+- **MUSS:** Bei Stufe C nennt der Brief die kritische Logik, an der die QA Mutationsproben macht. Mutationsproben an anderer Stelle sind Verschwendung.
 
 ## 11. Git-Workflow
 
@@ -353,10 +356,11 @@ Die Grundformel ist versioniert und wird nur bewusst geändert.
 - Jedes Projekt vermerkt in seiner Kontextdatei die verwendete Version.
 - Abweichungen in einem einzelnen Projekt nur mit Eintrag im Entscheidungslog.
 - Wiederkehrende Probleme aus Projekten werden über den Koordinator als Änderungsvorschlag eingebracht; der Mensch entscheidet.
-- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v1.8`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
+- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v1.9`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
 
 **Versionsgeschichte**
 
+- **1.9** (10. November 2026): Auswertung eines weiteren Projektlaufs. Nachprüfungen prüfen nur die Änderung, reine Doku-Änderungen auf Stufe A; Mutationsproben der Stufe C nur an der kritischen Logik, die der Brief nennt; Vorlage der manuellen Prüfung mit durchgehender Nummerierung, einer Aktion pro Schritt und Hilfe, wenn etwas anders aussieht.
 - **1.8** (9. November 2026): Auswertung eines weiteren Projektlaufs. Threads beginnen sofort mit der Arbeit statt mit einer Statusrunde; Änderungswünsche immer in einem neuen PO-Thread (Phase `CHANGE`); in Klasse S etwa eine Aufgabe pro Funktion; QA-Stufe B ohne Mutationsproben; Prüfkriterien für Schalter und für Änderungen, die eine Freigabe berühren, fest im PO-Ablauf.
 - **1.7** (9. November 2026): Auswertung eines weiteren Projektlaufs. Was die Rollen bei jedem Schritt brauchen, steht jetzt auch in ihren Rollendateien: Pflichtinhalt der ersten Freigabe, Schalter für änderbare Funktionen, CI ohne Doku-Läufe. Neue Regel: Eine Prüfung, die nicht möglich ist, wird einmal gemeldet, dann stoppt die Rolle.
 - **1.6** (9. November 2026): Abgleich mit bestehenden Leitfäden (Claude-Code-Dokumentation, OpenSSF). Automatische Gedächtnisfunktion des Werkzeugs abgeschaltet; Regeln technisch absichern, Hook für knappe Testausgaben; Sicherheitsregeln für Abhängigkeiten, CI-Bausteine und Negativtests; automatisches Weiterlaufen nach dem Limit erlaubt.

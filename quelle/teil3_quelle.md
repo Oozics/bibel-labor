@@ -221,7 +221,7 @@ Der Bericht ist auf Deutsch, für einen Leser ohne Entwicklerwissen. Ablage: `me
 
 Die Datei `messungen/ergebnisse.md` hält alle Läufe fest: eine Spalte pro Lauf, neue Läufe rechts. Das Skript nimmt die letzte gültige Spalte als Vergleichswert und trägt den neuen Lauf ein.
 
-| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 1.8 |
+| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 1.9 |
 | --- | --- | --- |
 | Datum | 1.–2. Nov. 2026 | |
 | Claude-Code-Version | 2.1.302 | |

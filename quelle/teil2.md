@@ -1,6 +1,6 @@
 # Teil 2: Handbuch
 
-Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 1.8, gehört zur Grundformel 1.8. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
+Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 1.9, gehört zur Grundformel 1.9. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
 
 ## 1. Regeln für das Designdokument
 
@@ -187,7 +187,7 @@ Grundformel version: <x.y>
 
 ```markdown
 # Role: Product Owner (PO)
-Grundformel version: 1.8
+Grundformel version: 1.9
 
 ## Mission
 Own the design document. Turn it into a specification and a backlog.
@@ -229,6 +229,8 @@ docs/tasks/, German gate summaries.
   feature; the scaffolding (core, config, CI) belongs to the first.
 - Feature marked "changeable": its QA check criteria include "switch
   it off in the config and run the tests".
+- QA level C: the check criteria name the critical logic for mutation
+  probes (e.g. balance calculation, damage formula, auth check).
 - The last backlog task is always REL (release preparation).
 - Collect QA hints without findings; plan them as one hardening task
   from 5 hints or before REL.
@@ -273,7 +275,7 @@ the human.
 
 ```markdown
 # Role: Senior Programmer (SP)
-Grundformel version: 1.8
+Grundformel version: 1.9
 
 ## Mission
 Propose the architecture, fill the stack profile, then implement
@@ -349,7 +351,7 @@ analysis and hand it to the PO.
 
 ```markdown
 # Role: Quality Assurance (QA)
-Grundformel version: 1.8
+Grundformel version: 1.9
 
 ## Mission
 Verify one task per thread independently. You never see the SP's
@@ -375,8 +377,11 @@ Write the result into the "Result" section of the task brief.
   A: CI green, read the diff.
   B (default): targeted probes - edge cases, actually remove the
      feature, rulebook compliance, security. No mutation probes.
-  C: as B, plus mutation probes, a fresh clone, full suite and
-     end-to-end tests.
+  C: as B, plus mutation probes only on the critical logic the brief
+     names, a fresh clone, full suite and end-to-end tests.
+- A re-check (after findings or a returned gate) checks only what
+  changed since your last check: docs or config only -> level A;
+  otherwise the brief's level.
 - Do not rerun the full suite at levels A and B; CI is the proof.
 - Red CI means no PASS.
 
@@ -402,7 +407,7 @@ Für spätere Einsätze als Schnittstelle nach außen. Der Koordinator ist die e
 
 ```markdown
 # Role: Coordinator
-Grundformel version: 1.8
+Grundformel version: 1.9
 
 ## Mission
 Set up projects from the template repository and act as the external
@@ -866,6 +871,7 @@ PASS | FINDINGS – <date>
 - „Out of scope“ ist nie leer. Mindestens die naheliegendste Erweiterung wird ausgeschlossen.
 - Die QA-Prüfkriterien sind konkret. Sie stehen schon im Brief, damit der SP sie kennt und die erste Runde besteht.
 - Passt die Aufgabe nicht in einen SP-Thread, wird sie geteilt, bevor sie an den SP geht. Ist sie so klein, dass der Grundaufwand überwiegt, wird sie mit einer verwandten Aufgabe zusammengelegt.
+- Bei Stufe C nennen die QA-Prüfkriterien die kritische Logik für Mutationsproben (z. B. Saldoberechnung, Schadensformel, Anmeldeprüfung).
 - In Klasse S werden Themen optionaler Rollen (z. B. Sicherheit, Performance) als Prüfpunkte in die QA-Prüfkriterien geschrieben.
 - In Klasse S gilt etwa eine Aufgabe pro Funktion; das Grundgerüst gehört zur ersten Aufgabe.
 - Ist eine Funktion als änderbar markiert, enthalten die QA-Prüfkriterien: „Funktion in der Konfiguration abschalten und Tests ausführen“.
@@ -1206,6 +1212,11 @@ Jedes Kapitel von Teil 2 liegt im Vorlagen-Repository als eigene Datei in `docs/
 
 Die Anleitung schreibt der SP in der Aufgabe `REL` für die Person, die in der Spezifikation unter „Delivery“ genannt ist. Zielgruppe ist ausdrücklich ein Nicht-Entwickler: keine Fachbegriffe ohne Erklärung, keine Entwicklerwerkzeuge, jeder Schritt einzeln. Sie ist in der Sprache dieser Person geschrieben.
 
+- **MUSS:** Die Schritte sind durch die ganze Anleitung fortlaufend nummeriert, auch über Abschnitte hinweg. Keine Nummer kommt zweimal vor.
+- **MUSS:** Ein Schritt enthält genau eine Aktion (einen Befehl, einen Klick, eine Eingabe).
+- **MUSS:** Jeder Prüfschritt sagt, was die Person tut, wenn sie etwas anderes sieht.
+- **MUSS:** Bekannte Darstellungsprobleme (z. B. Sonderzeichen, Warnungen des Betriebssystems) und ihre Lösung stehen vor dem ersten Schritt, nicht am Ende.
+
 ```markdown
 # Manuelle Prüfung: <Projekt> <Version>
 Für: <Person> · Dauer: ca. <n> Minuten
@@ -1213,19 +1224,23 @@ Für: <Person> · Dauer: ca. <n> Minuten
 ## Was du brauchst
 - <Gerät, Betriebssystem, Browser, Zugang>
 
+## Bevor du anfängst
+- <Bekannte Darstellungsprobleme oder Warnungen, warum sie harmlos
+  sind und was du dann tust>
+
 ## Starten
 ### Windows
-1. <Schritt, genau so, wie er auf dem Bildschirm aussieht>
+1. <Eine Aktion, genau so, wie sie auf dem Bildschirm aussieht>
+2. <Nächste Aktion>
 ### macOS
-1. <Schritt>
-
-## Was du siehst und was normal ist
-- <Erwartete Warnungen oder Hinweise und warum sie harmlos sind>
+1. <Eine Aktion>
 
 ## Prüfschritte
-| Nr. | Tu das | Erwartet | Ok? |
-| --- | --- | --- | --- |
-| 1 | <Aktion> | <sichtbares Ergebnis> | ☐ |
+Die Nummern zählen weiter, wo „Starten“ aufhört.
+
+| Nr. | Tu das (eine Aktion) | Erwartet | Wenn es anders aussieht | Ok? |
+| --- | --- | --- | --- | --- |
+| 3 | <Aktion> | <sichtbares Ergebnis> | <was du tust oder notierst> | ☐ |
 
 ## Wenn etwas nicht stimmt
 <Was du notierst (Nummer des Schritts, was du gesehen hast) und an wen
@@ -1259,6 +1274,6 @@ ki-projekt-vorlage/
   docs/tasks/                empty
 ```
 
-- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v1.8`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
+- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v1.9`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
 - **MUSS:** Im Vorlagen-Repository gibt es keinen projektspezifischen Inhalt und keine Secrets.
 - **SOLL:** Das Vorlagen-Repository ist auf GitHub als „Template repository“ markiert, damit „Use this template“ verfügbar ist.
