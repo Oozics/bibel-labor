@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 429313,
+ "stop_reason": "end_turn",
+ "session_id": "785e5834-5cdb-4488-914b-9512fbbf0fea",
+ "total_cost_usd": 1.8831768000000007,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 408,
+  "cache_read_input_tokens": 43977,
+  "output_tokens": 375,
+  "output_tokens_details": {
+   "thinking_tokens": 35
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 408,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 375,
+    "cache_read_input_tokens": 43977,
+    "cache_creation_input_tokens": 408,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 408
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5": {
+   "inputTokens": 102,
+   "outputTokens": 45425,
+   "thinkingTokens": 7965,
+   "cacheReadInputTokens": 1725624,
+   "cacheCreationInputTokens": 107599,
+   "cacheCreationEphemeral5mInputTokens": 77216,
+   "cacheCreationEphemeral1hInputTokens": 30383,
+   "webSearchRequests": 0,
+   "costUSD": 1.8831768000000007,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Das geht weiterhin nicht. Ich habe es fünfmal versucht, zuletzt eben, und GitHub verweigert mir jedes Mal den Zugriff auf das CI-Ergebnis. Eine weitere Abfrage brächte dasselbe Ergebnis, deshalb lasse ich sie.\n\nWie es weitergeht, liegt jetzt bei dir. Antworte mit einem dieser drei Wörter:\n- **grün** oder **rot**: Du hast es auf GitHub unter Actions beim Branch T001 nachgesehen.\n- **Rechte**: Du hast dem Token Leserechte für Actions gegeben, dann prüfe ich sofort.\n- **lokal**: Ich merge ohne CI-Bestätigung und halte das im Designdokument fest.\n\nBis dahin bleibt T001 ungemergt. Die Arbeit ist auf den Branch `T001` gepusht, die Übergabe steht in `docs/status.md`.",
+ "ttft_ms": 1493,
+ "type": "result",
+ "duration_ms": 4198,
+ "uuid": "f7fa78c4-b8cb-4802-a4c7-f5ea38db056f",
+ "ttft_stream_ms": 1222,
+ "time_to_request_ms": 503,
+ "first_content_frame_ms": 1222,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 5.8
+}

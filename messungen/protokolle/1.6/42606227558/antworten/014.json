@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 432322,
+ "stop_reason": "end_turn",
+ "session_id": "785e5834-5cdb-4488-914b-9512fbbf0fea",
+ "total_cost_usd": 1.9008538000000006,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 409,
+  "cache_read_input_tokens": 44385,
+  "output_tokens": 276,
+  "output_tokens_details": {
+   "thinking_tokens": 32
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 409,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 276,
+    "cache_read_input_tokens": 44385,
+    "cache_creation_input_tokens": 409,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 409
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5": {
+   "inputTokens": 104,
+   "outputTokens": 45701,
+   "thinkingTokens": 7997,
+   "cacheReadInputTokens": 1770009,
+   "cacheCreationInputTokens": 108008,
+   "cacheCreationEphemeral5mInputTokens": 77216,
+   "cacheCreationEphemeral1hInputTokens": 30792,
+   "webSearchRequests": 0,
+   "costUSD": 1.9008538000000006,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Ich kann das nicht selbst prüfen, weil mein Zugriffsschlüssel keine Leserechte für die CI hat. Daran ändert sich durch weitere Versuche nichts.\n\nIch brauche von dir eins dieser Wörter: **grün**, **rot**, **Rechte** oder **lokal**. Was sie jeweils bedeuten, steht in meiner vorigen Antwort.\n\nOhne eine dieser Antworten kann ich in diesem Thread nichts mehr tun. T001 ist vollständig gepusht, und die Übergabe steht in `docs/status.md`. Der nächste PO-Thread setzt dort an, sobald die CI-Frage geklärt ist.",
+ "ttft_ms": 1558,
+ "type": "result",
+ "duration_ms": 3589,
+ "uuid": "9b8b7dda-4e0f-48ea-823a-2fb0807a67fc",
+ "ttft_stream_ms": 1239,
+ "time_to_request_ms": 585,
+ "first_content_frame_ms": 1239,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 5.2
+}

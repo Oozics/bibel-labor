@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 10461,
+ "stop_reason": "end_turn",
+ "session_id": "f2c1bb52-11c3-4a9f-8128-cb32fa137fbd",
+ "total_cost_usd": 0.0288025,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 3634,
+  "cache_read_input_tokens": 2125,
+  "output_tokens": 1405,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 3634,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1405,
+    "cache_read_input_tokens": 2125,
+    "cache_creation_input_tokens": 3634,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 3634
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 1405,
+   "cacheReadInputTokens": 2125,
+   "cacheCreationInputTokens": 3634,
+   "webSearchRequests": 0,
+   "costUSD": 0.0288025,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 3634,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"ergebnis\": \"Erster gültiger Lauf, daher kein Prozentvergleich zur Vorversion möglich; der Lauf kostete 3,63 USD bei 59 Schritten und 3 Sitzungen und brach in PO Block 1 nach 15 Runden ohne Einigung ab. Die Regeltreue liegt bei 14 von 25 Regeln erfüllt (R5, R12, R20 und R21 nicht erfüllt, sieben weitere nicht prüfbar, weil der Lauf vorzeitig endete). Die Qualität der einen bearbeiteten Aufgabe (T001 von 5) ist gut, mit 100 % Erstdurchlauf, 1 QA-Runde, 0 echten Befunden und 35 lokal grünen Tests, aber die CI ist nicht bestätigt grün und nichts wurde gemergt.\", \"kostentreiber\": \"- **CI-Blockade in Block 1:** Das Token hat keine Leserechte für Actions (HTTP 403). Daraus entstanden 14 Wechsel zwischen PO und Entscheider ohne Fortschritt, rund 0,33 USD (lauf.jsonl Z. 8–21). Der Entscheider antwortete jedes Mal „Bitte prüf das selbst“.\\n- **SP und QA für T001:** 12 Schritte, rund 1,54 USD (lauf.jsonl Z. 7), darunter 8 Mutationsproben bei QA-Stufe B (docs/tasks/T001.md).\\n- **Plan-Phase mit Architekturentwurf:** 10 Schritte, rund 1,04 USD für Spezifikation, Architektur, Stack-Profil und Backlog-Entwurf (lauf.jsonl Z. 4).\", \"auffaelligkeiten\": \"- Abbruch: „PO Block 1: keine Einigung nach 15 Runden“; von 5 Aufgaben wurde nur T001 bearbeitet, nicht gemergt.\\n- Abgelehnte Berechtigungen: 0.\\n- Limit-Wartezeit: 0 Minuten.\\n- Unvorhergesehene Fragen: 3; Rückfragen insgesamt: 11 (5 davon in der Plan-Phase).\\n- CI nicht grün bestätigt, weil das Token HTTP 403 erhält (docs/status.md Z. 4–5).\\n- Die Auswertung nennt etwa 19 Minuten aktive Laufzeit, die kennzahlen nennen 21; der Unterschied ist nicht geklärt.\\n- Hilfskosten von 0,97 USD kommen zu den 3,63 USD hinzu.\", \"empfehlungen\": \"1. Dem Token vor dem Lauf Leserechte für Actions geben oder die CI-Prüfung anders bereitstellen. Befund: HTTP 403 führte zu 14 ergebnislosen Wechseln und zum Abbruch (Z. 8–21).\\n2. Eine Abbruchregel für wiederholte, gleiche Blockaden einführen (etwa nach 2–3 Wiederholungen eskalieren oder sauber beenden). Befund: R21 nicht erfüllt, „fünfmal versucht“ (Z. 13), Abbruch erst nach 15 Runden.\\n3. Das Gate-Dokument um Klasse S und „personenbezogene Daten: ja/nein“ ergänzen bzw. als Pflichtfeld prüfen. Befund: R5 nicht erfüllt (gate-plan.md).\\n4. In der Architekturvorlage jedes Merkmal mit Ein/Aus-Schalter in der Konfiguration verlangen. Befund: R12 nicht erfüllt, F02 nur „removable via registry“ (architecture.md Z. 154).\\n5. In ci.yml `paths-ignore` für reine Dokumentationsänderungen vorgeben. Befund: R20 nicht erfüllt, `push: branches [\\\"**\\\"]` ohne Ausschluss.\"}",
+ "ttft_ms": 10675,
+ "type": "result",
+ "duration_ms": 10697,
+ "uuid": "a1e9a463-76cf-440c-9816-48d0e61ccb68",
+ "ttft_stream_ms": 2016,
+ "time_to_request_ms": 234,
+ "first_content_frame_ms": 2016,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 12.1
+}

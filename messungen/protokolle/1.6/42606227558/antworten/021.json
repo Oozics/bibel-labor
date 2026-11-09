@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 466930,
+ "stop_reason": "end_turn",
+ "session_id": "785e5834-5cdb-4488-914b-9512fbbf0fea",
+ "total_cost_usd": 2.0494508000000007,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 376,
+  "cache_read_input_tokens": 47293,
+  "output_tokens": 357,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 376,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 357,
+    "cache_read_input_tokens": 47293,
+    "cache_creation_input_tokens": 376,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 376
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5": {
+   "inputTokens": 120,
+   "outputTokens": 48295,
+   "thinkingTokens": 8088,
+   "cacheReadInputTokens": 2138274,
+   "cacheCreationInputTokens": 110883,
+   "cacheCreationEphemeral5mInputTokens": 77216,
+   "cacheCreationEphemeral1hInputTokens": 33667,
+   "webSearchRequests": 0,
+   "costUSD": 2.0494508000000007,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Ich kann das nicht selbst prüfen. Mein Zugriffsschlüssel hat keine Leserechte für die CI-Ergebnisse auf GitHub, deshalb lehnt GitHub jede Abfrage ab. Ändern kann das nur, wer den Schlüssel verwaltet.\n\nEine dieser Antworten genügt mir:\n- **grün** oder **rot**: Du hast auf GitHub unter Actions beim Lauf für den Branch T001 nachgesehen.\n- **Rechte**: Der Schlüssel hat jetzt Leserechte für Actions. Dann prüfe ich sofort selbst.\n- **lokal**: Ich merge ohne CI-Bestätigung. Lokal sind alle Prüfungen grün, alle 35 Tests bestehen, und ich vermerke die Entscheidung im Designdokument.\n\nSolange keine davon kommt, bleibt T001 ungemergt. Der Branch `T001` ist gepusht, der Stand steht in `docs/status.md`.",
+ "ttft_ms": 4964,
+ "type": "result",
+ "duration_ms": 4992,
+ "uuid": "85a28ba8-7484-4c17-a9bf-270ffca764db",
+ "ttft_stream_ms": 2398,
+ "time_to_request_ms": 614,
+ "first_content_frame_ms": 2398,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 6.6
+}

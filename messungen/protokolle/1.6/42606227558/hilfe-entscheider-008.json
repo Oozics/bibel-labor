@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 3619,
+ "stop_reason": "end_turn",
+ "session_id": "a1ddcfd7-e9e0-4c34-8f74-d5a58c76fb9a",
+ "total_cost_usd": 0.0190605,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 3871,
+  "cache_read_input_tokens": 2125,
+  "output_tokens": 336,
+  "output_tokens_details": {
+   "thinking_tokens": 159
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 3871,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 336,
+    "cache_read_input_tokens": 2125,
+    "cache_creation_input_tokens": 3871,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 3871
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 336,
+   "cacheReadInputTokens": 2125,
+   "cacheCreationInputTokens": 3871,
+   "webSearchRequests": 0,
+   "costUSD": 0.0190605,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 159,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 3871,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\": \"antworten\", \"antwort\": \"Bitte prüf das selbst.\", \"naechste_phase\": null, \"anzahl_fragen\": 1, \"unvorhergesehen\": false, \"aenderungswunsch_gesendet\": false, \"freigabe\": \"keine\", \"notiz\": \"Bitte um CI-Prüfung bzw. Token-Rechte: Regelantwort 'Bitte prüf das selbst.' gegeben; F01 und F02 noch nicht auf main, daher kein Ä1.\"}",
+ "ttft_ms": 2826,
+ "type": "result",
+ "duration_ms": 3853,
+ "uuid": "ad63d4b1-b335-466a-b10f-d65f3e85abbe",
+ "ttft_stream_ms": 1280,
+ "time_to_request_ms": 233,
+ "first_content_frame_ms": 1280,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 5.3
+}

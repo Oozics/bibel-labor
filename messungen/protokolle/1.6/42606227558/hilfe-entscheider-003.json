@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 9238,
+ "stop_reason": "end_turn",
+ "session_id": "f69a66d5-5040-4077-ba9c-f58a8eef5170",
+ "total_cost_usd": 0.0268145,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 4652,
+  "cache_read_input_tokens": 2125,
+  "output_tokens": 799,
+  "output_tokens_details": {
+   "thinking_tokens": 501
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 4652,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 799,
+    "cache_read_input_tokens": 2125,
+    "cache_creation_input_tokens": 4652,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4652
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 799,
+   "cacheReadInputTokens": 2125,
+   "cacheCreationInputTokens": 4652,
+   "webSearchRequests": 0,
+   "costUSD": 0.0268145,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 501,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 4652,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\":\"antworten\",\"antwort\":\"Zu 1: F02 hat Vorrang. N3 lautet neu: Das Programm schreibt keine Dateien außer seiner Datendatei und der vom Nutzer verlangten Exportdatei.\\n\\nZu 2 bis 5: Entscheide nach bestem Ermessen und vermerke es im Designdokument.\",\"naechste_phase\":null,\"anzahl_fragen\":5,\"unvorhergesehen\":true,\"aenderungswunsch_gesendet\":false,\"freigabe\":\"keine\",\"notiz\":\"Widerspruch N3/F02 laut Regel beantwortet, Fragen 2 bis 5 mit der Standardantwort für Unvorhergesehenes; noch keine Freigabe, da architecture.md nicht ausgefüllt ist und F01/F02 nicht auf main sind.\"}",
+ "ttft_ms": 7965,
+ "type": "result",
+ "duration_ms": 9492,
+ "uuid": "f9c5fb8f-eb4e-43b6-bd4c-d4d9cbc2ffe4",
+ "ttft_stream_ms": 4118,
+ "time_to_request_ms": 253,
+ "first_content_frame_ms": 4118,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 10.8
+}

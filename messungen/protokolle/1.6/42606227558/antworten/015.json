@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 435669,
+ "stop_reason": "end_turn",
+ "session_id": "785e5834-5cdb-4488-914b-9512fbbf0fea",
+ "total_cost_usd": 1.9191006000000006,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 310,
+  "cache_read_input_tokens": 44794,
+  "output_tokens": 340,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 310,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 340,
+    "cache_read_input_tokens": 44794,
+    "cache_creation_input_tokens": 310,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 310
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5": {
+   "inputTokens": 106,
+   "outputTokens": 46041,
+   "thinkingTokens": 7997,
+   "cacheReadInputTokens": 1814803,
+   "cacheCreationInputTokens": 108318,
+   "cacheCreationEphemeral5mInputTokens": 77216,
+   "cacheCreationEphemeral1hInputTokens": 31102,
+   "webSearchRequests": 0,
+   "costUSD": 1.9191006000000006,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Ich kann das nicht selbst prüfen. Mein Zugriffsschlüssel darf die CI-Ergebnisse nicht lesen, und daran ändert sich nichts, solange du die Rechte nicht anpasst. Darum frage ich nicht noch einmal ab.\n\nEs gibt drei Wege, wie es weitergehen kann:\n- Du schaust auf GitHub unter **Actions** beim Lauf für den Branch T001 nach und sagst mir **grün** oder **rot**.\n- Du gibst dem Zugriffsschlüssel Leserechte für Actions und schreibst **Rechte**. Dann prüfe ich sofort selbst.\n- Du schreibst **lokal**. Dann merge ich auf Grundlage der lokalen Prüfung und vermerke das im Designdokument.\n\nT001 ist gepusht, die Übergabe steht in `docs/status.md`. Mehr kann ich in diesem Thread nicht tun. Er endet hier.",
+ "ttft_ms": 3862,
+ "type": "result",
+ "duration_ms": 3887,
+ "uuid": "e0473419-59c7-427d-ae28-0c32eff0f578",
+ "ttft_stream_ms": 1234,
+ "time_to_request_ms": 544,
+ "first_content_frame_ms": 1234,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 5.5
+}
