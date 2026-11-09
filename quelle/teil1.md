@@ -94,6 +94,8 @@ Die farbigen Rauten sind Entscheidungen des Menschen; alles andere läuft selbst
 
 **Änderungen später:** Neue oder geänderte Anforderungen fließen zuerst ins Designdokument (über den PO). Projektübergreifendes läuft über den Koordinator.
 
+- **MUSS:** Ein Änderungswunsch wird nie mitten in einem laufenden Thread eingeplant. Der PO beendet die aktuelle Aufgabe, übergibt und schließt den Thread. Die Änderung plant ein neuer PO-Thread in der Phase „Change“ (ID `CHANGE`): Lückenanalyse, Anpassung von Designdokument, Spezifikation und Architektur, neue Aufgaben, bei „berührt Freigabe“ Prüfung durch QA und erneute Freigabe.
+
 **Wann die Architektur erneut freigegeben werden muss:** Details der Architektur (neue interne Funktionen, zusätzliche Tests, Umbenennungen innerhalb eines Moduls) ändert der SP frei und vermerkt sie in `architecture.md`. Berührt eine Änderung eine freigegebene Entscheidung (Technologie, Modulgrenzen, Schnittstellen nach außen, Datenmodell, Sicherheitskonzept), markiert der SP sie in der Übergabe als **„berührt Freigabe“**. Nur dann prüft die QA die Architekturänderung (in Klasse S im Rahmen der QA-Prüfung dieser Aufgabe), und der Mensch gibt erneut frei.
 
 ## 5. Projektgedächtnis
@@ -141,7 +143,7 @@ Grundregel: Jede Aufgabe ist in einer Sitzung erledigbar und landet als genau ei
 - Abhängigkeiten zu anderen Aufgaben
 - Prüfstufe der QA (A, B oder C, Abschnitt 10) und konkrete Prüfkriterien, z. B. „Entfernen des Features tatsächlich durchführen“
 
-**Aufgabengröße:** Jede Aufgabe hat einen festen Grundaufwand (Brief lesen, Übergabe, Commit, CI). Zu kleine Aufgaben verschwenden ihn, zu große sprengen das Kontext-Budget. Richtwert: eine Aufgabe ist ein zusammenhängendes Stück Funktion mit eigenen Akzeptanzkriterien.
+**Aufgabengröße:** Jede Aufgabe hat einen festen Grundaufwand (Brief lesen, Übergabe, Commit, CI, QA-Runde). Zu kleine Aufgaben verschwenden ihn, zu große sprengen das Kontext-Budget. Richtwert: eine Aufgabe ist ein zusammenhängendes Stück Funktion mit eigenen Akzeptanzkriterien. In Klasse S gilt etwa eine Aufgabe pro Funktion; das Grundgerüst (Kern, Konfiguration, CI) gehört zur ersten Aufgabe.
 
 **Bündeln:** Hinweise der QA ohne Befund und anderer Kleinkram werden nicht als Einzelaufgaben eingeplant. Der PO sammelt sie im Backlog und plant sie ab fünf Stück oder spätestens vor `REL` als eine gemeinsame Härtungsaufgabe.
 
@@ -242,8 +244,8 @@ Die KI schreibt und führt die Tests aus; *was* getestet wird, bestimmen die fre
 | Stufe | Wann | Was die QA tut |
 | --- | --- | --- |
 | **A** | Doku, Konfiguration, reine Umbenennungen | CI grün prüfen, Diff lesen |
-| **B** (Standard) | Normale Funktionen | Gezielte Proben: Randfälle, Mutationen, Feature tatsächlich entfernen, Regelwerk |
-| **C** | Benutzeroberfläche, kritische Logik (Geld, Personendaten, Sicherheit), Release | Wie B, dazu frischer Klon, volle Suite und End-to-End-Tests |
+| **B** (Standard) | Normale Funktionen | Gezielte Proben: Randfälle, Feature tatsächlich entfernen, Regelwerk |
+| **C** | Benutzeroberfläche, kritische Logik (Geld, Personendaten, Sicherheit), Release | Wie B, dazu Mutationsproben, frischer Klon, volle Suite und End-to-End-Tests |
 
 ## 11. Git-Workflow
 
@@ -252,7 +254,7 @@ Git ist das Rückgrat des Arbeitsablaufs, nicht nur die Sicherung. Der Hauptzwei
 - **MUSS:** Jedes Projekt hat ein privates Remote-Repository (z. B. GitHub, GitLab), angelegt aus dem Vorlagen-Repository. Ein rein lokales Repository ist kein Backup.
 - **MUSS:** Außer dem ersten Commit des Koordinators beim Projektstart kein direkter Commit auf den Hauptzweig (`main`).
 - **MUSS:** Ein Branch pro Aufgabe. **SOLL:** benannt nach Typ und Aufgaben-ID, z. B. `feature/T042-export`. Gibt die Umgebung den Branch-Namen vor, gilt der vorgegebene Name.
-- **MUSS:** Die Aufgaben-ID steht in jeder Commit-Nachricht und jedem PR-Titel. Für Phasenarbeit ohne Aufgabe gelten die festen IDs `PLAN` (Klasse S), `DESIGN`, `ARCH` und `REL`.
+- **MUSS:** Die Aufgaben-ID steht in jeder Commit-Nachricht und jedem PR-Titel. Für Phasenarbeit ohne Aufgabe gelten die festen IDs `PLAN` (Klasse S), `DESIGN`, `ARCH`, `CHANGE` und `REL`.
 - **MUSS:** Commit nach jedem funktionierenden Zwischenstand, Push spätestens am Ende des Threads. Nachrichten folgen Conventional Commits, z. B. `feat(export): add CSV export [T042]`.
 - **MUSS:** Auch Doku-Änderungen laufen über Branches. Status- und Backlog-Updates des PO zu einer Aufgabe landen vor dem Squash-Merge auf deren Branch. Phasenarbeit (Designdokument, Spezifikation, Architektur, Release) liegt auf einem eigenen Branch mit der Phasen-ID und wird nach der Freigabe gemergt.
 - **MUSS:** Merge in `main` nur nach „Bestanden“ der QA und grünen Tests. Der PO führt den Merge als Squash-Merge durch: Auf dem Branch sind beliebig viele Zwischen-Commits erlaubt, auf dem Hauptzweig ergibt jede Aufgabe genau einen Commit.
@@ -306,6 +308,7 @@ Ein Thread sendet bei **jedem** Arbeitsschritt (jeder Nachricht, jedem Werkzeuga
 
 - **MUSS:** Der Ablauf passt zur Projektklasse (Abschnitt 4). Jede Phase, jede Freigabe und jede Prüfrunde kostet mehrere Threads; in Klasse S entfallen deshalb die getrennte Architekturphase und deren QA-Prüfung.
 - **MUSS:** Erst planen, dann am Stück umsetzen. Kein Ausprobieren in Einzelschritten.
+- **MUSS:** Ein Thread beginnt sofort mit seiner Arbeit. Er fragt den Menschen nur, wenn er eine Entscheidung, eine Freigabe oder Hilfe bei einer Blockade braucht; eine Rückfrage, nur um anzufangen, kostet eine ganze Runde.
 - **MUSS:** Zusammengehörige Befehle in einem Werkzeugaufruf bündeln (z. B. Formatieren, Linten und Testen zusammen).
 - **MUSS:** Nach zwei erfolglosen Versuchen am selben Problem wird nicht weiter probiert. Die Rolle analysiert die Ursache und meldet an den PO.
 - **MUSS:** Kann eine Rolle eine nötige Prüfung nicht durchführen (fehlende Rechte, Werkzeug nicht erreichbar), meldet sie das einmal mit Ursache und stoppt. Sie versucht es nicht erneut und umgeht es nicht.
@@ -350,10 +353,11 @@ Die Grundformel ist versioniert und wird nur bewusst geändert.
 - Jedes Projekt vermerkt in seiner Kontextdatei die verwendete Version.
 - Abweichungen in einem einzelnen Projekt nur mit Eintrag im Entscheidungslog.
 - Wiederkehrende Probleme aus Projekten werden über den Koordinator als Änderungsvorschlag eingebracht; der Mensch entscheidet.
-- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v1.7`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
+- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v1.8`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
 
 **Versionsgeschichte**
 
+- **1.8** (9. November 2026): Auswertung eines weiteren Projektlaufs. Threads beginnen sofort mit der Arbeit statt mit einer Statusrunde; Änderungswünsche immer in einem neuen PO-Thread (Phase `CHANGE`); in Klasse S etwa eine Aufgabe pro Funktion; QA-Stufe B ohne Mutationsproben; Prüfkriterien für Schalter und für Änderungen, die eine Freigabe berühren, fest im PO-Ablauf.
 - **1.7** (9. November 2026): Auswertung eines weiteren Projektlaufs. Was die Rollen bei jedem Schritt brauchen, steht jetzt auch in ihren Rollendateien: Pflichtinhalt der ersten Freigabe, Schalter für änderbare Funktionen, CI ohne Doku-Läufe. Neue Regel: Eine Prüfung, die nicht möglich ist, wird einmal gemeldet, dann stoppt die Rolle.
 - **1.6** (9. November 2026): Abgleich mit bestehenden Leitfäden (Claude-Code-Dokumentation, OpenSSF). Automatische Gedächtnisfunktion des Werkzeugs abgeschaltet; Regeln technisch absichern, Hook für knappe Testausgaben; Sicherheitsregeln für Abhängigkeiten, CI-Bausteine und Negativtests; automatisches Weiterlaufen nach dem Limit erlaubt.
 - **1.5** (2. November 2026): Auswertung eines kleinen Projekts mit Bibel 1.4, das nach rund 12 USD vor der ersten Programmzeile abgebrochen wurde. Projektklassen S, M, L mit passendem Ablauf (Abschnitt 4); Projektstart aus einem Vorlagen-Repository statt Abschreiben aus dem PDF; Handbuch nur noch gezielt nachschlagen, kompakte Rollendateien; optionale Rollen erst ab Klasse M; stärkstes Modell für alle Rollen, fest in den Projekteinstellungen; keine Verbrauchszeilen mehr in Übergaben; Push vor jeder Übergabe; Adapter für die Claude-App.

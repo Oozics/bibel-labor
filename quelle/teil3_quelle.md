@@ -1,6 +1,6 @@
 # Teil 3: Referenzprojekt
 
-Das Referenzprojekt misst, ob eine neue Version der Bibel Kosten senkt, ohne Qualität oder Regeltreue zu verlieren. Es ist ein kleines Kassenbuch für die Kommandozeile mit zwei Funktionen und einem Änderungswunsch, Projektklasse S, und so gebaut, dass jede Regel der Bibel mindestens einmal greifen muss. Ziel: ein Lauf in etwa einer Stunde und unter 5 USD API-Gegenwert. Der Lauf ist vollständig automatisiert: Ein Steuerungsskript im privaten Repository `bibel-labor` startet auf Knopfdruck in GitHub Actions alle Rollen, spielt mit kurzen Claude-Aufrufen den Auftraggeber (den **Entscheider**) nach festen Regeln, misst exakt und erstellt am Ende einen Prüfbericht als PDF. Du drückst den Knopf und liest den Bericht.
+Das Referenzprojekt misst, ob eine neue Version der Bibel Kosten senkt, ohne Qualität oder Regeltreue zu verlieren. Es ist ein kleines Kassenbuch für die Kommandozeile mit zwei Funktionen und einem Änderungswunsch, Projektklasse S, und so gebaut, dass jede Regel der Bibel mindestens einmal greifen muss. Ziel: ein Lauf in etwa einer Stunde, unter 10 USD API-Gegenwert und innerhalb eines Nutzungsfensters des Abos. Der Lauf ist vollständig automatisiert: Ein Steuerungsskript im privaten Repository `bibel-labor` startet auf Knopfdruck in GitHub Actions alle Rollen, spielt mit kurzen Claude-Aufrufen den Auftraggeber (den **Entscheider**) nach festen Regeln, misst exakt und erstellt am Ende einen Prüfbericht als PDF. Du drückst den Knopf und liest den Bericht.
 
 ## 1. Aufbau des Messlaufs
 
@@ -110,7 +110,7 @@ Delete the _handover folder after you have taken it over.
 
 **PO, Umsetzung**
 
-Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Er sendet ihn, sobald F01 und F02 auf `main` sind:
+Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Sind F01 und F02 auf `main` und hat die laufende PO-Sitzung geendet, startet das Skript eine neue PO-Sitzung für die Phase „Change“; deren erste Nachricht ist:
 
 > **Ä1:** „Zwei Änderungen: Den CSV-Export brauchen wir nicht mehr, bitte F02 vollständig entfernen. Außerdem sollen die Daten künftig in einer SQLite-Datei statt in JSON gespeichert werden; vorhandene JSON-Daten müssen beim ersten Start automatisch übernommen werden.“
 
@@ -133,20 +133,21 @@ Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Er sendet ihn, s
 2. **GitHub-Schlüssel:** Unter *GitHub → Settings → Developer settings → Fine-grained tokens* einen Token anlegen: Eigentümer dein Konto, Zugriff auf alle Repositories, Rechte *Administration*, *Contents* und *Workflows* jeweils mit Lesen und Schreiben, dazu *Actions* und *Commit statuses* nur Lesen (ohne sie sieht der PO nicht, ob die CI grün ist). Als Secret `BIBEL_GH_TOKEN` speichern. Damit legt der Lauf das Projekt-Repository an, und die Rollen können pushen.
 3. **Vorlage:** Das Vorlagen-Repository ist als „Template repository“ markiert. Die zu messende Version bringt der Workflow *Vorlage veröffentlichen* auf `main`, samt Release `v<Version>`; mit der Option „Danach den Referenzlauf starten“ folgt der Lauf automatisch.
 
-**Start:** In `bibel-labor` unter *Actions → Referenzlauf → Run workflow*. Eingaben: Version (leer = aktuelle Version), Kostenbremse für den ganzen Lauf (Standard 10 USD), Berechtigungsmodus (Standard `auto`; `bypassPermissions` nur, wenn `auto` nicht verfügbar ist, denn der Rechner von GitHub wird nach dem Lauf gelöscht).
+**Start:** Am besten direkt nach dem Zurücksetzen des Nutzungslimits, damit der Lauf in ein Nutzungsfenster passt. In `bibel-labor` unter *Actions → Referenzlauf → Run workflow*. Eingaben: Version (leer = aktuelle Version), Kostenbremse für den ganzen Lauf (Standard 20 USD), Berechtigungsmodus (Standard `auto`; `bypassPermissions` nur, wenn `auto` nicht verfügbar ist, denn der Rechner von GitHub wird nach dem Lauf gelöscht).
 
 **Ablauf des Skripts**
 
 1. **Einrichtung:** Projekt-Repository aus der Vorlage anlegen und klonen, Designdokument nach `_handover/` legen.
 2. **Koordinator:** neue Sitzung mit dem Startprompt aus dem Handbuch des Projekts (`docs/handbook/04-coordinator-start.md`) und den Zusatzangaben aus Abschnitt 5. Der Entscheider beantwortet jede Nachricht, bis der Koordinator fertig ist.
-3. **PO pro Phase:** für jede Phase bzw. jeden Block eine neue Sitzung mit dem PO-Startprompt (`docs/templates/thread-start.md`). Der Entscheider beantwortet jede Nachricht, sendet Ä1 zum vorgesehenen Zeitpunkt und meldet, wann eine Phase fertig ist und welche folgt.
-4. **Release:** Bittet der PO um die manuelle Prüfung oder Freigabe 3, startet das Skript den manuellen Prüfer in einer Kopie von `main`. Danach entscheidet der Entscheider über Freigabe 3.
-5. **Auswertung:** Auditor-Sitzung mit dem Prompt aus Abschnitt 8, nur mit Leserechten.
-6. **Bericht:** Kennzahlen exakt aus dem Protokoll, Regeltreue vom Auditor, die Texte für Ergebnis, Kostentreiber, Auffälligkeiten und Empfehlungen von einem kurzen Claude-Aufruf. Das Skript schreibt `bericht.md` und trägt den Lauf in `ergebnisse.md` ein. Ein zweiter Schritt erzeugt die PDF und speichert alles in `bibel-labor`.
+3. **PO pro Phase:** für jede Phase bzw. jeden Block eine neue Sitzung mit dem PO-Startprompt (`docs/templates/thread-start.md`). Der Entscheider beantwortet jede Nachricht und meldet, wann eine Phase fertig ist und welche folgt.
+4. **Änderung:** Sind F01 und F02 auf `main`, startet das Skript eine neue PO-Sitzung für die Phase „Change“ und sendet Ä1 als erste Nachricht.
+5. **Release:** Bittet der PO um die manuelle Prüfung oder Freigabe 3, startet das Skript den manuellen Prüfer in einer Kopie von `main`. Danach entscheidet der Entscheider über Freigabe 3.
+6. **Auswertung:** Auditor-Sitzung mit dem Prompt aus Abschnitt 8, nur mit Leserechten.
+7. **Bericht:** Kennzahlen exakt aus dem Protokoll, Regeltreue vom Auditor, die Texte für Ergebnis, Kostentreiber, Auffälligkeiten und Empfehlungen von einem kurzen Claude-Aufruf. Das Skript schreibt `bericht.md` und trägt den Lauf in `ergebnisse.md` ein. Nach dem Lauf erzeugt der Workflow *Bericht* die PDF und speichert alles in `bibel-labor`; er lässt sich für einen Lauf auch von Hand starten (Eingabe: Lauf-Nummer).
 
 **Messung:** Jeder Aufruf steht als Zeile in `messungen/protokolle/<Version>/<Lauf>/lauf.jsonl`: Zeit, Rolle, Phase, Sitzung, gekürzte Nachricht und Antwort, `num_turns`, `total_cost_usd`, `modelUsage` und abgelehnte Berechtigungen. Die vollständigen Antworten liegen daneben in `antworten/`. `total_cost_usd` und `modelUsage` zählen über eine fortgesetzte Sitzung weiter; das Skript nimmt deshalb pro Sitzung den letzten Wert, statt die Aufrufe zu addieren. `num_turns` gilt pro Aufruf und wird addiert.
 
-**Kostenbremse:** Jeder Aufruf bekommt `--max-budget-usd 3`. Bricht ein Aufruf daran ab, setzt das Skript dieselbe Sitzung einmal mit „Bitte mach weiter.“ fort. Übersteigen die Projekt-Sitzungen zusammen die Kostenbremse des Laufs, endet der Lauf; Auditor und Bericht laufen trotzdem, als Teilbericht.
+**Kostenbremse:** Jeder Aufruf bekommt `--max-budget-usd 8`; die Grenze liegt bewusst weit über dem Bedarf einer Aufgabe, damit keine Rolle wegen ihr früher aufhört. Bricht ein Aufruf daran ab, setzt das Skript dieselbe Sitzung einmal mit „Bitte mach weiter.“ fort. Übersteigen die Projekt-Sitzungen zusammen die Kostenbremse des Laufs, endet der Lauf; Auditor und Bericht laufen trotzdem, als Teilbericht.
 
 **Limit:** Erreicht ein Aufruf das Nutzungslimit, wartet das Skript jeweils 15 Minuten und versucht es erneut, insgesamt höchstens 4 Stunden. Die Wartezeit zählt nicht zur Laufzeit; das Erreichen des Limits steht im Bericht.
 
@@ -220,7 +221,7 @@ Der Bericht ist auf Deutsch, für einen Leser ohne Entwicklerwissen. Ablage: `me
 
 Die Datei `messungen/ergebnisse.md` hält alle Läufe fest: eine Spalte pro Lauf, neue Läufe rechts. Das Skript nimmt die letzte gültige Spalte als Vergleichswert und trägt den neuen Lauf ein.
 
-| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 1.7 |
+| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 1.8 |
 | --- | --- | --- |
 | Datum | 1.–2. Nov. 2026 | |
 | Claude-Code-Version | 2.1.302 | |

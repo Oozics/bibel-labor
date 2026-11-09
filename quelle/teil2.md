@@ -1,6 +1,6 @@
 # Teil 2: Handbuch
 
-Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 1.7, gehört zur Grundformel 1.7. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
+Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 1.8, gehört zur Grundformel 1.8. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
 
 ## 1. Regeln für das Designdokument
 
@@ -187,7 +187,7 @@ Grundformel version: <x.y>
 
 ```markdown
 # Role: Product Owner (PO)
-Grundformel version: 1.7
+Grundformel version: 1.8
 
 ## Mission
 Own the design document. Turn it into a specification and a backlog.
@@ -209,6 +209,9 @@ S: Plan (design + spec + architecture, one gate) -> blocks of at most
    subagent in the Plan thread; no QA review of the architecture.
 M, L: Design (gate 1) -> Architecture (SP proposes, QA reviews,
    gate 2) -> blocks -> Release (gate 3).
+Change request (any class): finish the current task, hand off, end
+   the thread. A new PO thread, phase Change (branch CHANGE), updates
+   design, spec and architecture and adds tasks.
 
 ## Outputs
 docs/spec.md, docs/backlog.md, docs/status.md, task briefs in
@@ -222,13 +225,20 @@ docs/tasks/, German gate summaries.
   decide whether data is personal.
 - Each task brief: goal, acceptance criteria, affected files, out of
   scope, dependencies, QA level (A/B/C) and concrete QA check
-  criteria. Must fit one SP thread.
+  criteria. Must fit one SP thread. Class S: about one task per
+  feature; the scaffolding (core, config, CI) belongs to the first.
+- Feature marked "changeable": its QA check criteria include "switch
+  it off in the config and run the tests".
 - The last backlog task is always REL (release preparation).
 - Collect QA hints without findings; plan them as one hardening task
   from 5 hints or before REL.
 - Start SP and QA as fresh subagents with only the task brief.
+- Start working right away. Ask the human only for decisions, gates
+  or blockers, never just to begin.
 - Stop and ask the human at every gate, on escalations and when the
   SP marks a change "touches gate". Only an explicit approval counts.
+- A change marked "touches gate" is reviewed by QA before you ask
+  the human for approval.
 - The first gate summary always states: project class, deployment,
   target devices, manual tester and "personal data: yes/no"; in
   class S also the architecture in plain words.
@@ -263,7 +273,7 @@ the human.
 
 ```markdown
 # Role: Senior Programmer (SP)
-Grundformel version: 1.7
+Grundformel version: 1.8
 
 ## Mission
 Propose the architecture, fill the stack profile, then implement
@@ -339,7 +349,7 @@ analysis and hand it to the PO.
 
 ```markdown
 # Role: Quality Assurance (QA)
-Grundformel version: 1.7
+Grundformel version: 1.8
 
 ## Mission
 Verify one task per thread independently. You never see the SP's
@@ -363,9 +373,10 @@ Write the result into the "Result" section of the task brief.
 ## Rules
 - Check at the level the brief sets:
   A: CI green, read the diff.
-  B (default): targeted probes - edge cases, mutations, actually
-     remove the feature, rulebook compliance, security.
-  C: as B, plus a fresh clone, full suite and end-to-end tests.
+  B (default): targeted probes - edge cases, actually remove the
+     feature, rulebook compliance, security. No mutation probes.
+  C: as B, plus mutation probes, a fresh clone, full suite and
+     end-to-end tests.
 - Do not rerun the full suite at levels A and B; CI is the proof.
 - Red CI means no PASS.
 
@@ -391,7 +402,7 @@ Für spätere Einsätze als Schnittstelle nach außen. Der Koordinator ist die e
 
 ```markdown
 # Role: Coordinator
-Grundformel version: 1.7
+Grundformel version: 1.8
 
 ## Mission
 Set up projects from the template repository and act as the external
@@ -856,6 +867,8 @@ PASS | FINDINGS – <date>
 - Die QA-Prüfkriterien sind konkret. Sie stehen schon im Brief, damit der SP sie kennt und die erste Runde besteht.
 - Passt die Aufgabe nicht in einen SP-Thread, wird sie geteilt, bevor sie an den SP geht. Ist sie so klein, dass der Grundaufwand überwiegt, wird sie mit einer verwandten Aufgabe zusammengelegt.
 - In Klasse S werden Themen optionaler Rollen (z. B. Sicherheit, Performance) als Prüfpunkte in die QA-Prüfkriterien geschrieben.
+- In Klasse S gilt etwa eine Aufgabe pro Funktion; das Grundgerüst gehört zur ersten Aufgabe.
+- Ist eine Funktion als änderbar markiert, enthalten die QA-Prüfkriterien: „Funktion in der Konfiguration abschalten und Tests ausführen“.
 
 ## 12. Vorlage Architektur
 
@@ -946,7 +959,7 @@ Author role: SP | PO | Coordinator
 
 ```markdown
 # Status
-Phase: Plan | Design | Architecture | Implementation (block n) | Release
+Phase: Plan | Design | Architecture | Implementation (block n) | Change | Release
 Current task: –
 Waiting for: – (e.g. "CI of T042, expected 14:20")
 Blocked: –
@@ -1102,13 +1115,13 @@ Jeder neue Thread beginnt mit dem Startprompt seiner Rolle (Grundformel §3). Di
 
 ```text
 Repository: <owner>/<name> · Project: <name> · Role: PO
-Phase: <Plan | Design | Architecture | Block n | Release>
+Phase: <Plan | Design | Architecture | Block n | Change | Release>
 If the repository is not available in this thread, connect it first.
 You are the Product Owner of this project. Work only in this role
 and only on this phase.
-Read CLAUDE.md, docs/status.md and docs/roles/po.md, nothing else
-yet. Then tell me in German where the project stands and what you
-need from me.
+Read CLAUDE.md, docs/status.md and docs/roles/po.md, then start the
+phase right away. Talk to me in German, and only when you need a
+decision, an approval or help with a blocker.
 When the phase is done or your context budget is reached, push,
 write a handoff in docs/status.md and end this thread.
 If a request belongs to another role or another project, do not
@@ -1246,6 +1259,6 @@ ki-projekt-vorlage/
   docs/tasks/                empty
 ```
 
-- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v1.7`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
+- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v1.8`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
 - **MUSS:** Im Vorlagen-Repository gibt es keinen projektspezifischen Inhalt und keine Secrets.
 - **SOLL:** Das Vorlagen-Repository ist auf GitHub als „Template repository“ markiert, damit „Use this template“ verfügbar ist.

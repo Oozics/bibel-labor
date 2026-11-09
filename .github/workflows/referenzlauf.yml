@@ -10,7 +10,7 @@ on:
       budget_gesamt:
         description: "Kostenbremse für den ganzen Lauf in USD"
         required: false
-        default: "10"
+        default: "20"
       berechtigungen:
         description: "Berechtigungsmodus der Rollen"
         type: choice
@@ -28,14 +28,12 @@ jobs:
   lauf:
     runs-on: windows-latest
     timeout-minutes: 360
-    outputs:
-      protokoll: ${{ steps.lauf.outputs.protokoll }}
     defaults:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7
         with:
           python-version: "3.12"
       - name: Claude Code installieren
@@ -54,7 +52,6 @@ jobs:
           GH_TOKEN: ${{ secrets.BIBEL_GH_TOKEN }}
         run: gh auth setup-git
       - name: Referenzlauf
-        id: lauf
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           GH_TOKEN: ${{ secrets.BIBEL_GH_TOKEN }}
@@ -69,46 +66,7 @@ jobs:
           python werkzeuge/referenzlauf.py "${args[@]}"
       - name: Messdaten sichern
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7
         with:
           name: messung
           path: messungen/
-
-  bericht:
-    needs: lauf
-    if: always() && needs.lauf.outputs.protokoll != ''
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
-        with:
-          name: messung
-          path: messungen/
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
-        with:
-          python-version: "3.12"
-      - name: PDF-Werkzeuge installieren
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q libpango-1.0-0 libpangoft2-1.0-0 fonts-dejavu-core
-          pip install -q -r werkzeuge/requirements.txt
-      - name: Prüfbericht als PDF
-        env:
-          PROTOKOLL: ${{ needs.lauf.outputs.protokoll }}
-        run: python werkzeuge/bericht.py "$PROTOKOLL"
-      - name: Ergebnisse speichern
-        env:
-          RUN_ID: ${{ github.run_id }}
-        run: |
-          git config user.name "Referenzlauf"
-          git config user.email "referenzlauf@users.noreply.github.com"
-          git add messungen/
-          git commit -m "Referenzlauf $RUN_ID: Messdaten und Prüfbericht"
-          git push
-      - name: Prüfbericht bereitstellen
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
-        with:
-          name: pruefbericht
-          path: messungen/berichte/*.pdf

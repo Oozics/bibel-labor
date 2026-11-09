@@ -309,10 +309,9 @@ NACHRICHT>>>
 Entscheide streng nach den Regeln und antworte NUR mit einem JSON-Objekt:
 {{"aktion": "antworten" | "phase_fertig" | "manuelle_pruefung",
   "antwort": "Text an die Rolle; leer bei phase_fertig und manuelle_pruefung",
-  "naechste_phase": "Plan" | "Block 1" | "Block 2" | "Block 3" | "Release" | "Ende" | null,
+  "naechste_phase": "Plan" | "Block 1" | "Block 2" | "Block 3" | "Change" | "Release" | "Ende" | null,
   "anzahl_fragen": Zahl der Fragen, die die Rolle in dieser Nachricht an dich stellt,
   "unvorhergesehen": true, wenn du eine Standardantwort für etwas geben musstest, das nicht in den Regeln steht,
-  "aenderungswunsch_gesendet": true, wenn deine Antwort den Änderungswunsch Ä1 enthält,
   "freigabe": "keine" | "erteilt" | "abgelehnt",
   "notiz": "ein Satz für das Protokoll"}}
 
@@ -320,10 +319,11 @@ Hinweise:
 - "phase_fertig": Die Rolle hat ihre Phase oder ihren Auftrag abgeschlossen, übergeben und braucht nichts mehr
   von dir. Nenne die nächste Phase: nach dem Koordinator "Plan"; nach "Plan" "Block 1"; nach einem Block der
   nächste Block oder "Release", wenn alle Aufgaben außer REL erledigt sind; nach "Release" "Ende".
+  Ausnahme: Sind F01 und F02 laut Git auf main und ist Ä1 noch nicht gesendet, ist die nächste Phase "Change".
+  Nach "Change" der nächste Block oder "Release", wie oben.
 - "manuelle_pruefung": Die Rolle bittet in der Release-Phase um die manuelle Prüfung oder um Freigabe 3, und es
   liegt noch kein Ergebnis der manuellen Prüfung vor.
-- Den Änderungswunsch Ä1 sendest du genau einmal und wörtlich, sobald F01 und F02 laut Git auf main sind und Ä1
-  noch nicht gesendet wurde. Hängt die Rolle gerade an einer Frage, beantworte zuerst die Frage und füge Ä1 an.
+- Den Änderungswunsch Ä1 sendest du nie selbst; er kommt als erste Nachricht der Phase "Change".
 - Steht die Antwort in den Regeln, gib sie wörtlich. Sonst die passende Standardantwort aus den Regeln."""
         try:
             decision = first_json(self.helper(prompt, self.work, "entscheider"))
@@ -335,8 +335,6 @@ Hinweise:
         if phase in ("Koordinator", "Plan"):
             self.questions += int(decision.get("anzahl_fragen") or 0)
         self.unforeseen += 1 if decision.get("unvorhergesehen") else 0
-        if decision.get("aenderungswunsch_gesendet"):
-            self.ae1_sent = True
         with (self.out / "entscheidungen.jsonl").open("a", encoding="utf-8") as f:
             f.write(json.dumps(decision, ensure_ascii=False) + "\n")
         return decision
@@ -377,8 +375,16 @@ Antworte am Ende NUR mit JSON:
 
     def prompt_po(self, phase: str) -> str:
         block = code_blocks((self.project / "docs/templates/thread-start.md").read_text(encoding="utf-8"))[0]
+        if "<Plan | Design | Architecture | Block n | Change | Release>" not in block:
+            raise RuntimeError("PO-Startprompt der Vorlage hat ein unerwartetes Format")
         return (block.replace("<owner>/<name>", f"{self.args.owner}/{self.repo}").replace("<name>", "Kassenbuch")
-                .replace("<Plan | Design | Architecture | Block n | Release>", phase))
+                .replace("<Plan | Design | Architecture | Block n | Change | Release>", phase))
+
+    def change_request(self) -> str:
+        match = re.search(r"\*\*Ä1:\*\* „(.+?)“\s*$", self.rules, flags=re.M)
+        if not match:
+            raise RuntimeError("Änderungswunsch Ä1 nicht in Teil 3, Abschnitt 5 gefunden")
+        return match.group(1)
 
     def conversation(self, role: str, phase: str, first_prompt: str) -> str | None:
         """One thread: start, answer until the phase is done. Returns the next phase."""
@@ -413,8 +419,16 @@ Antworte am Ende NUR mit JSON:
         for _ in range(MAX_PHASES):
             if not phase or phase == "Ende" or self.over_budget():
                 break
+            if phase == "Release" and not self.ae1_sent:
+                phase = "Change"  # the change request always comes before the release
+            if phase == "Change" and self.ae1_sent:
+                phase = "Release"
             say(f"PO-Phase {phase} startet.")
-            phase = self.conversation("PO", phase, self.prompt_po(phase))
+            first = self.prompt_po(phase)
+            if phase == "Change":
+                first += "\n\n" + self.change_request()
+                self.ae1_sent = True
+            phase = self.conversation("PO", phase, first)
         else:
             self.stopped_reason = self.stopped_reason or f"mehr als {MAX_PHASES} Phasen"
 
@@ -586,8 +600,8 @@ def main() -> None:
     p.add_argument("--version", default=META["version"])
     p.add_argument("--run-id", default="")
     p.add_argument("--workdir", default=str(ROOT.parent / "lauf"))
-    p.add_argument("--budget-call", type=float, default=3.0)
-    p.add_argument("--budget-total", type=float, default=10.0)
+    p.add_argument("--budget-call", type=float, default=8.0)
+    p.add_argument("--budget-total", type=float, default=20.0)
     p.add_argument("--permission-mode", default="auto")
     p.add_argument("--max-limit-wait-min", type=int, default=240)
     p.add_argument("--dry-run", action="store_true")

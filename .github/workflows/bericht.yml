@@ -1,0 +1,80 @@
+name: Bericht
+
+# Turns the measurement data of a reference run into the PDF report and
+# stores both in bibel-labor. Runs after every reference run; can also be
+# started by hand for an earlier run.
+
+on:
+  workflow_run:
+    workflows: ["Referenzlauf"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Nummer des Referenzlaufs (aus der Adresse des Laufs)"
+        required: true
+
+concurrency:
+  group: bericht
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  bericht:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion != 'skipped'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      RUN_ID: ${{ inputs.run_id || github.event.workflow_run.id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
+        with:
+          ref: main
+      - name: Messdaten holen
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8
+        with:
+          name: messung
+          path: messungen/
+          run-id: ${{ env.RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Protokoll finden
+        id: protokoll
+        run: |
+          dir=$(find messungen/protokolle -mindepth 2 -maxdepth 2 -type d -name "$RUN_ID" | head -n1)
+          if [ -z "$dir" ]; then
+            echo "::error::Kein Protokoll für Lauf $RUN_ID in den Messdaten."
+            exit 1
+          fi
+          echo "pfad=$dir" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7
+        with:
+          python-version: "3.12"
+      - name: PDF-Werkzeuge installieren
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q libpango-1.0-0 libpangoft2-1.0-0 fonts-dejavu-core
+          pip install -q -r werkzeuge/requirements.txt
+      - name: Prüfbericht als PDF
+        env:
+          PROTOKOLL: ${{ steps.protokoll.outputs.pfad }}
+        run: python werkzeuge/bericht.py "$PROTOKOLL"
+      - name: Ergebnisse speichern
+        run: |
+          git config user.name "Referenzlauf"
+          git config user.email "referenzlauf@users.noreply.github.com"
+          git add messungen/
+          if git diff --cached --quiet; then
+            echo "Nichts Neues zu speichern."
+            exit 0
+          fi
+          git commit -q -m "Referenzlauf $RUN_ID: Messdaten und Prüfbericht"
+          git pull -q --rebase origin main
+          git push -q origin HEAD:main
+      - name: Prüfbericht bereitstellen
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7
+        with:
+          name: pruefbericht
+          path: messungen/berichte/*.pdf
