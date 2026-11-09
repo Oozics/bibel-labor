@@ -1,0 +1,52 @@
+{
+ "schritte_gesamt": 12,
+ "problematische_schritte": [
+  {
+   "nr": 2,
+   "grund": "Die Umlaute in 'für' und 'überschrieben' erschienen als '�'. Das liegt vermutlich an meiner umgeleiteten Ausgabe (Codepage) und nicht an einem echten Terminal. Ich konnte nicht prüfen, ob sie dort richtig aussehen."
+  },
+  {
+   "nr": 3,
+   "grund": "'Keine Einträge' und das '€' erschienen als '�'. Die Ursache ist vermutlich dieselbe wie bei Schritt 2 und nicht sicher festzustellen."
+  },
+  {
+   "nr": 4,
+   "grund": "Das '€', 'Brötchen' und 'Bäcker' erschienen als '�'. Der Rest der Zeile entsprach der Erwartung."
+  },
+  {
+   "nr": 6,
+   "grund": "Das '€' und das 'é' erschienen als '�'. Das heutige Datum 09.11.2026 war korrekt."
+  },
+  {
+   "nr": 7,
+   "grund": "Reihenfolge und Saldo 1.192,50 stimmten. Das '€' und die Umlaute erschienen als '�', also genau der Fall, vor dem die Anleitung warnt. Die Anleitung sagt nicht, was zu tun ist, wenn es so aussieht. Der Hinweis auf 'chcp' und Schritt 12 steht weit weg."
+  },
+  {
+   "nr": 8,
+   "grund": "Die Fehlermeldung war inhaltlich richtig. Das 'Ü' in 'Ungültiger' erschien als '�'."
+  },
+  {
+   "nr": 9,
+   "grund": "Fehlermeldung und unveränderte Liste waren richtig. Die Umlaute erschienen als '�'. Schritt 9 enthält zwei Befehle, und die Anleitung sagt nicht klar, dass beide getrennt eingegeben werden."
+  },
+  {
+   "nr": 10,
+   "grund": "Die Meldung stimmte, und die CSV-Datei hat den richtigen Inhalt mit Kopfzeile und UTF-8-BOM. Excel steht nicht zur Verfügung, deshalb konnte ich das Öffnen und die Darstellung der Spalten nicht prüfen. Die Buchung 'Café' hat einen leeren Text, was die Anleitung nicht erwähnt."
+  },
+  {
+   "nr": 11,
+   "grund": "Die Fehlermeldung stimmte. Das 'ä' in 'verändert' erschien als '�'. Das Änderungsdatum der Datei habe ich nicht verglichen."
+  },
+  {
+   "nr": 12,
+   "grund": "Optionaler Schritt, nicht ausgeführt. Er braucht außerdem den Editor per Doppelklick, den ich nicht habe."
+  },
+  {
+   "nr": 1,
+   "grund": "Funktioniert (Python 3.12.10). Die Anleitungsschritte 1 bis 3 (ZIP entpacken, Terminal über Rechtsklick öffnen) konnte ich nicht ausführen, weil ich im bereits vorhandenen Ordner gearbeitet habe. Außerdem fehlt in der Anleitung ein Hinweis, dass die Schritte 1 bis 12 in der Tabelle von den nummerierten Startschritten 1 bis 4 zu unterscheiden sind. Die Nummern doppeln sich."
+  }
+ ],
+ "geschaetzte_minuten_fuer_einen_menschen": 10,
+ "bestanden": false,
+ "wandzeit_minuten": 0.4
+}
