@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 3034,
+ "stop_reason": "end_turn",
+ "session_id": "786c154d-dbed-4fed-bed6-3f96968abf3b",
+ "total_cost_usd": 0.0201484,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 4185,
+  "cache_read_input_tokens": 2244,
+  "output_tokens": 318,
+  "output_tokens_details": {
+   "thinking_tokens": 186
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 4185,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 318,
+    "cache_read_input_tokens": 2244,
+    "cache_creation_input_tokens": 4185,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4185
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 318,
+   "cacheReadInputTokens": 2244,
+   "cacheCreationInputTokens": 4185,
+   "webSearchRequests": 0,
+   "costUSD": 0.0201484,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 186,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 4185,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\":\"phase_fertig\",\"antwort\":\"\",\"naechste_phase\":\"Change\",\"anzahl_fragen\":0,\"unvorhergesehen\":false,\"freigabe\":\"keine\",\"notiz\":\"F01 und F02 sind auf main, die PO-Sitzung ist beendet und Ä1 noch nicht gesendet, daher startet als Nächstes die Phase Change.\"}",
+ "ttft_ms": 2487,
+ "type": "result",
+ "duration_ms": 3166,
+ "uuid": "9437424b-e8bd-4538-ba53-15a849b89398",
+ "ttft_stream_ms": 1047,
+ "time_to_request_ms": 131,
+ "first_content_frame_ms": 1047,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 4.2
+}
