@@ -48,7 +48,7 @@ Jede Regel der Bibel hat im Referenzprojekt einen Auslöser. Diese Tabelle ist z
 | R10 | `status.md` unter 100 Zeilen, Archiv | Mehr als fünf Übergaben im Lauf | `status.md` ≤ 100 Zeilen; bei mehr als fünf Übergaben `status-archive.md` gefüllt |
 | R11 | Ein Commit pro Aufgabe, nichts direkt auf `main` | Ganzer Lauf | `git log main`: Start-Commit plus ein Commit pro Aufgabe oder Phase, alle mit ID |
 | R12 | Feature-Schalter für Änderbares | F02 ist als änderbar markiert | F02 hat einen Ein/Aus-Schalter in der Konfiguration |
-| R13 | Feature sauber entfernbar | Änderungswunsch Ä1, Teil a: F02 entfernen | Diff berührt nur Modul, Registrierung, Tests und Doku; alle Tests grün; Fehlerklassen und Texte von F02 lagen in dessen Modul |
+| R13 | Feature sauber entfernbar | Änderungswunsch Ä1, Teil a: F02 entfernen | Diff berührt keinen Code im Kern, nur Modul, Registrierung, Tests, Doku und Konfigurationsdateien (Schalter, CI-Pfade); alle Tests grün; Fehlerklassen und Texte von F02 lagen in dessen Modul |
 | R14 | Regel „berührt Freigabe“ | Ä1, Teil b: Speicher von JSON auf SQLite | SP markiert „touches gate“; QA prüft die Architekturänderung; der PO holt eine erneute Freigabe ein |
 | R15 | Adapter für Außenwelt | Ä1, Teil b | Diff des Speicherwechsels liegt fast nur im Speicher-Adapter und der Datenübernahme |
 | R16 | Konfiguration geprüft beim Start | `KASSENBUCH_DATA` | Ungültiger Pfad führt zu klarer Fehlermeldung, Test vorhanden |
@@ -110,7 +110,7 @@ Delete the _handover folder after you have taken it over.
 
 **PO, Umsetzung**
 
-Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Sind F01 und F02 auf `main` und hat die laufende PO-Sitzung geendet, spätestens aber, wenn der PO um die manuelle Prüfung oder Freigabe 3 bittet, startet das Skript eine neue PO-Sitzung für die Phase „Change“; deren erste Nachricht ist:
+Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Bittet der PO um die manuelle Prüfung oder Freigabe 3, ist also die Release-Vorbereitung `REL` fertig, beendet das Skript die Sitzung und startet eine neue PO-Sitzung für die Phase „Change“; deren erste Nachricht ist:
 
 > **Ä1:** „Zwei Änderungen: Den CSV-Export brauchen wir nicht mehr, bitte F02 vollständig entfernen. Außerdem sollen die Daten künftig in einer SQLite-Datei statt in JSON gespeichert werden; vorhandene JSON-Daten müssen beim ersten Start automatisch übernommen werden.“
 
@@ -133,14 +133,14 @@ Der Entscheider gibt nichts vor, außer einem Änderungswunsch. Sind F01 und F02
 2. **GitHub-Schlüssel:** Unter *GitHub → Settings → Developer settings → Fine-grained tokens* einen Token anlegen: Eigentümer dein Konto, Zugriff auf alle Repositories, Rechte *Administration*, *Contents* und *Workflows* jeweils mit Lesen und Schreiben, dazu *Actions* und *Commit statuses* nur Lesen (ohne sie sieht der PO nicht, ob die CI grün ist). Als Secret `BIBEL_GH_TOKEN` speichern. Damit legt der Lauf das Projekt-Repository an, und die Rollen können pushen.
 3. **Vorlage:** Das Vorlagen-Repository ist als „Template repository“ markiert. Die zu messende Version bringt der Workflow *Vorlage veröffentlichen* auf `main`, samt Release `v<Version>`; mit der Option „Danach den Referenzlauf starten“ folgt der Lauf automatisch.
 
-**Start:** Am besten direkt nach dem Zurücksetzen des Nutzungslimits, damit der Lauf in ein Nutzungsfenster passt. In `bibel-labor` unter *Actions → Referenzlauf → Run workflow*. Eingaben: Version (leer = aktuelle Version), Kostenbremse für den ganzen Lauf (Standard 20 USD), Berechtigungsmodus (Standard `auto`; `bypassPermissions` nur, wenn `auto` nicht verfügbar ist, denn der Rechner von GitHub wird nach dem Lauf gelöscht).
+**Start:** Am besten direkt nach dem Zurücksetzen des Nutzungslimits, damit der Lauf in ein Nutzungsfenster passt. In `bibel-labor` unter *Actions → Referenzlauf → Run workflow*. Eingaben: Version (leer = aktuelle Version), Kostenbremse für den ganzen Lauf (Standard 30 USD), Berechtigungsmodus (Standard `auto`; `bypassPermissions` nur, wenn `auto` nicht verfügbar ist, denn der Rechner von GitHub wird nach dem Lauf gelöscht).
 
 **Ablauf des Skripts**
 
 1. **Einrichtung:** Projekt-Repository aus der Vorlage anlegen und klonen, Designdokument nach `_handover/` legen.
 2. **Koordinator:** neue Sitzung mit dem Startprompt aus dem Handbuch des Projekts (`docs/handbook/04-coordinator-start.md`) und den Zusatzangaben aus Abschnitt 5. Der Entscheider beantwortet jede Nachricht, bis der Koordinator fertig ist.
 3. **PO pro Phase:** für jede Phase bzw. jeden Block eine neue Sitzung mit dem PO-Startprompt (`docs/templates/thread-start.md`). Der Entscheider beantwortet jede Nachricht und meldet, wann eine Phase fertig ist und welche folgt.
-4. **Änderung:** Sind F01 und F02 auf `main`, spätestens bei der Bitte um die manuelle Prüfung, startet das Skript eine neue PO-Sitzung für die Phase „Change“ und sendet Ä1 als erste Nachricht.
+4. **Änderung:** Bittet der PO zum ersten Mal um die manuelle Prüfung oder Freigabe 3, startet das Skript eine neue PO-Sitzung für die Phase „Change“ und sendet Ä1 als erste Nachricht.
 5. **Release:** Bittet der PO um die manuelle Prüfung oder Freigabe 3, startet das Skript den manuellen Prüfer in einer Kopie von `main`. Danach entscheidet der Entscheider über Freigabe 3.
 6. **Auswertung:** Auditor-Sitzung mit dem Prompt aus Abschnitt 8, nur mit Leserechten.
 7. **Bericht:** Kennzahlen exakt aus dem Protokoll, Regeltreue vom Auditor, die Texte für Ergebnis, Kostentreiber, Auffälligkeiten und Empfehlungen von einem kurzen Claude-Aufruf. Das Skript schreibt `bericht.md` und trägt den Lauf in `ergebnisse.md` ein. Nach dem Lauf erzeugt der Workflow *Bericht* die PDF und speichert alles in `bibel-labor`; er lässt sich für einen Lauf auch von Hand starten (Eingabe: Lauf-Nummer).
@@ -188,7 +188,8 @@ main and of all remote branches, the diff of the first commit against
 the template repository, docs/status.md, docs/status-archive.md,
 docs/backlog.md, docs/tasks/*.md, docs/architecture.md, docs/roles/,
 .claude/, .github/workflows/, docs/manual-test.md, and the run log at
-<path to lauf.jsonl>.
+<path to lauf.jsonl>. Run git commands directly in the current folder,
+one per call, without cd, -C or pipes (e.g. git log --oneline --all).
 
 1. Fill the metrics from Part 3 §7 that the repository and the log can
    show: sessions, turns, tasks, first-pass rate, QA rounds, real

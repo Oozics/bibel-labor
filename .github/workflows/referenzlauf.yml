@@ -10,7 +10,7 @@ on:
       budget_gesamt:
         description: "Kostenbremse für den ganzen Lauf in USD"
         required: false
-        default: "20"
+        default: "30"
       berechtigungen:
         description: "Berechtigungsmodus der Rollen"
         type: choice

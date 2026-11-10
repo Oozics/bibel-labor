@@ -319,7 +319,6 @@ Hinweise:
 - "phase_fertig": Die Rolle hat ihre Phase oder ihren Auftrag abgeschlossen, übergeben und braucht nichts mehr
   von dir. Nenne die nächste Phase: nach dem Koordinator "Plan"; nach "Plan" "Block 1"; nach einem Block der
   nächste Block oder "Release", wenn alle Aufgaben außer REL erledigt sind; nach "Release" "Ende".
-  Ausnahme: Sind F01 und F02 laut Git auf main und ist Ä1 noch nicht gesendet, ist die nächste Phase "Change".
   Nach "Change" der nächste Block oder "Release", wie oben.
 - "manuelle_pruefung": Die Rolle bittet in der Release-Phase um die manuelle Prüfung oder um Freigabe 3, und es
   liegt noch kein Ergebnis der manuellen Prüfung vor.
@@ -332,8 +331,7 @@ Hinweise:
                         "unvorhergesehen": True, "notiz": "Entscheider-Antwort war kein JSON, Standardantwort gesendet."}
         decision["_rolle"], decision["_phase"] = role, phase
         self.decisions.append(decision)
-        if phase in ("Koordinator", "Plan"):
-            self.questions += int(decision.get("anzahl_fragen") or 0)
+        self.questions += int(decision.get("anzahl_fragen") or 0)
         self.unforeseen += 1 if decision.get("unvorhergesehen") else 0
         with (self.out / "entscheidungen.jsonl").open("a", encoding="utf-8") as f:
             f.write(json.dumps(decision, ensure_ascii=False) + "\n")
@@ -608,7 +606,7 @@ def main() -> None:
     p.add_argument("--run-id", default="")
     p.add_argument("--workdir", default=str(ROOT.parent / "lauf"))
     p.add_argument("--budget-call", type=float, default=8.0)
-    p.add_argument("--budget-total", type=float, default=20.0)
+    p.add_argument("--budget-total", type=float, default=30.0)
     p.add_argument("--permission-mode", default="auto")
     p.add_argument("--max-limit-wait-min", type=int, default=240)
     p.add_argument("--dry-run", action="store_true")
