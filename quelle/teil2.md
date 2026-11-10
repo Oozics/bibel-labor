@@ -1,6 +1,6 @@
 # Teil 2: Handbuch
 
-Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 1.9, gehört zur Grundformel 1.9. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
+Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 2.0, gehört zur Grundformel 2.0. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
 
 ## 1. Regeln für das Designdokument
 
@@ -187,7 +187,7 @@ Grundformel version: <x.y>
 
 ```markdown
 # Role: Product Owner (PO)
-Grundformel version: 1.9
+Grundformel version: 2.0
 
 ## Mission
 Own the design document. Turn it into a specification and a backlog.
@@ -229,11 +229,12 @@ docs/tasks/, German gate summaries.
   feature; the scaffolding (core, config, CI) belongs to the first.
 - Feature marked "changeable": its QA check criteria include "switch
   it off in the config and run the tests".
-- QA level C: the check criteria name the critical logic for mutation
-  probes (e.g. balance calculation, damage formula, auth check).
+- QA level C: the check criteria name the critical logic covered by
+  the mutation test job (e.g. balance calculation, damage formula,
+  auth check).
 - The last backlog task is always REL (release preparation).
 - Collect QA hints without findings; plan them as one hardening task
-  from 5 hints or before REL.
+  from 5 hints or before REL. Class S: at most one, right before REL.
 - Start SP and QA as fresh subagents with only the task brief.
 - Start working right away. Ask the human only for decisions, gates
   or blockers, never just to begin.
@@ -243,7 +244,8 @@ docs/tasks/, German gate summaries.
   the human for approval.
 - The first gate summary always states: project class, deployment,
   target devices, manual tester and "personal data: yes/no"; in
-  class S also the architecture in plain words.
+  class S also the architecture in plain words. It lists the commands
+  the SP added to the allow list, for approval.
 - Before merging: update backlog and status on the task branch, check
   CI once (no polling; no CI needed for doc-only branches), note it in
   the handoff. Then squash-merge: one commit per task on main.
@@ -275,7 +277,7 @@ the human.
 
 ```markdown
 # Role: Senior Programmer (SP)
-Grundformel version: 1.9
+Grundformel version: 2.0
 
 ## Mission
 Propose the architecture, fill the stack profile, then implement
@@ -298,6 +300,9 @@ decision log, changelog and CLAUDE.md where affected, handoff note.
 - Plan before coding, then implement in one go.
 - One feature = one module. Small core. Features talk only through
   defined interfaces. Central feature registration.
+- What only one feature uses (its errors, types, constants, messages)
+  lives in its module. It moves to the core only when a second
+  feature needs it.
 - Everything external behind an adapter (files, clock, network, DB).
   Domain logic has no infrastructure dependencies.
 - Config outside code, validated at startup. Validate all input at
@@ -306,6 +311,11 @@ decision log, changelog and CLAUDE.md where affected, handoff note.
 - Timeouts, bounded retries and defined failure behaviour for
   external calls.
 - Hot paths (see architecture): direct code allowed, measure first.
+- Performance tests in CI assert with a safety margin (about 3x the
+  target); the exact target is measured at level C in the release.
+- With the architecture: add the commands roles need to build, test
+  and check to the allow list in .claude/settings.json, and set up
+  the mutation test job for the critical paths in the stack profile.
 - Every bug fix starts with a failing test.
 - Before adding a library: check that it exists, is widely used and
   maintained. Install only via the official package manager, pinned.
@@ -351,7 +361,7 @@ analysis and hand it to the PO.
 
 ```markdown
 # Role: Quality Assurance (QA)
-Grundformel version: 1.9
+Grundformel version: 2.0
 
 ## Mission
 Verify one task per thread independently. You never see the SP's
@@ -377,8 +387,9 @@ Write the result into the "Result" section of the task brief.
   A: CI green, read the diff.
   B (default): targeted probes - edge cases, actually remove the
      feature, rulebook compliance, security. No mutation probes.
-  C: as B, plus mutation probes only on the critical logic the brief
-     names, a fresh clone, full suite and end-to-end tests.
+  C: as B, plus read the mutation test report (surviving mutants
+     on the named critical logic are findings), a fresh clone, full
+     suite and end-to-end tests. No hand-made mutation probes.
 - A re-check (after findings or a returned gate) checks only what
   changed since your last check: docs or config only -> level A;
   otherwise the brief's level.
@@ -407,7 +418,7 @@ Für spätere Einsätze als Schnittstelle nach außen. Der Koordinator ist die e
 
 ```markdown
 # Role: Coordinator
-Grundformel version: 1.9
+Grundformel version: 2.0
 
 ## Mission
 Set up projects from the template repository and act as the external
@@ -500,10 +511,12 @@ Die Datei liegt leer im Vorlagen-Repository; der SP füllt sie mit der Architekt
 
 ## Tooling
 - Test filter hook: interpreter command, test runners it covers:
+- Commands on the allow list (.claude/settings.json), with reason:
+- Mutation test tool, CI job and critical paths it covers:
 
 ## Performance (if critical)
 - Hot paths:
-- Targets:
+- Targets (exact, measured at release) and CI thresholds (with margin):
 - Benchmark and profiling tools:
 ```
 
@@ -586,7 +599,7 @@ End with PASS or a findings list of at most 15 lines.
 
 **Technische Absicherung (`.claude/settings.json`)**
 
-Das Modell steht fest in den Einstellungen, damit es nicht von einer Voreinstellung des Werkzeugs abhängt. Die automatische Gedächtnisfunktion ist abgeschaltet (Grundformel §5). Regeln wie „kein Force-Push“ oder „keine Secrets lesen“ werden zusätzlich technisch gesperrt. `.env.example` bleibt lesbar, weil sie keine Werte enthält; Sperrregeln haben Vorrang vor Erlaubnisregeln, deshalb werden die echten Dateien einzeln gesperrt.
+Das Modell steht fest in den Einstellungen, damit es nicht von einer Voreinstellung des Werkzeugs abhängt. Die automatische Gedächtnisfunktion ist abgeschaltet (Grundformel §5). Regeln wie „kein Force-Push“ oder „keine Secrets lesen“ werden zusätzlich technisch gesperrt. `.env.example` bleibt lesbar, weil sie keine Werte enthält; Sperrregeln haben Vorrang vor Erlaubnisregeln, deshalb werden die echten Dateien einzeln gesperrt. Die Erlaubnisliste (`allow`) ist in der Vorlage leer; der SP trägt mit der Architektur die Befehle ein, die das Projekt braucht (Grundformel §12), z. B. `"Bash(powershell.exe:*)"` oder `"Bash(cargo build:*)"`.
 
 ```json
 {
@@ -607,6 +620,7 @@ Das Modell steht fest in den Einstellungen, damit es nicht von einer Voreinstell
     ]
   },
   "permissions": {
+    "allow": [],
     "deny": [
       "Bash(git push --force:*)",
       "Bash(git push -f:*)",
@@ -871,7 +885,8 @@ PASS | FINDINGS – <date>
 - „Out of scope“ ist nie leer. Mindestens die naheliegendste Erweiterung wird ausgeschlossen.
 - Die QA-Prüfkriterien sind konkret. Sie stehen schon im Brief, damit der SP sie kennt und die erste Runde besteht.
 - Passt die Aufgabe nicht in einen SP-Thread, wird sie geteilt, bevor sie an den SP geht. Ist sie so klein, dass der Grundaufwand überwiegt, wird sie mit einer verwandten Aufgabe zusammengelegt.
-- Bei Stufe C nennen die QA-Prüfkriterien die kritische Logik für Mutationsproben (z. B. Saldoberechnung, Schadensformel, Anmeldeprüfung).
+- Bei Stufe C nennen die QA-Prüfkriterien die kritische Logik, die der Mutationstest abdeckt (z. B. Saldoberechnung, Schadensformel, Anmeldeprüfung).
+- In Klasse S gibt es höchstens eine Härtungsaufgabe, direkt vor `REL`.
 - In Klasse S werden Themen optionaler Rollen (z. B. Sicherheit, Performance) als Prüfpunkte in die QA-Prüfkriterien geschrieben.
 - In Klasse S gilt etwa eine Aufgabe pro Funktion; das Grundgerüst gehört zur ersten Aufgabe.
 - Ist eine Funktion als änderbar markiert, enthalten die QA-Prüfkriterien: „Funktion in der Konfiguration abschalten und Tests ausführen“.
@@ -1274,6 +1289,6 @@ ki-projekt-vorlage/
   docs/tasks/                empty
 ```
 
-- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v1.9`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
+- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v2.0`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
 - **MUSS:** Im Vorlagen-Repository gibt es keinen projektspezifischen Inhalt und keine Secrets.
 - **SOLL:** Das Vorlagen-Repository ist auf GitHub als „Template repository“ markiert, damit „Use this template“ verfügbar ist.

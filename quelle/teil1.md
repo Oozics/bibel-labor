@@ -145,7 +145,7 @@ Grundregel: Jede Aufgabe ist in einer Sitzung erledigbar und landet als genau ei
 
 **Aufgabengröße:** Jede Aufgabe hat einen festen Grundaufwand (Brief lesen, Übergabe, Commit, CI, QA-Runde). Zu kleine Aufgaben verschwenden ihn, zu große sprengen das Kontext-Budget. Richtwert: eine Aufgabe ist ein zusammenhängendes Stück Funktion mit eigenen Akzeptanzkriterien. In Klasse S gilt etwa eine Aufgabe pro Funktion; das Grundgerüst (Kern, Konfiguration, CI) gehört zur ersten Aufgabe.
 
-**Bündeln:** Hinweise der QA ohne Befund und anderer Kleinkram werden nicht als Einzelaufgaben eingeplant. Der PO sammelt sie im Backlog und plant sie ab fünf Stück oder spätestens vor `REL` als eine gemeinsame Härtungsaufgabe.
+**Bündeln:** Hinweise der QA ohne Befund und anderer Kleinkram werden nicht als Einzelaufgaben eingeplant. Der PO sammelt sie im Backlog und plant sie ab fünf Stück oder spätestens vor `REL` als eine gemeinsame Härtungsaufgabe. In Klasse S gibt es höchstens eine Härtungsaufgabe, direkt vor `REL`.
 
 **Eine Aufgabe ist erst fertig, wenn:**
 
@@ -165,6 +165,7 @@ Ziel: Jedes Feature lässt sich ändern, abschalten oder entfernen, ohne dass An
 
 - **MUSS:** Jedes fachliche Feature ist ein eigenes Modul (eigener Ordner) mit eigenem Code, eigenen Tests und eigener Konfiguration. Geschnitten wird nach Funktion, nicht nach Technik.
 - **MUSS:** Ein kleiner Kern enthält nur Gemeinsames: Konfiguration, Logging, Fehlerbehandlung, Feature-Registrierung, gemeinsame Typen.
+- **MUSS:** Was nur ein Feature braucht (eigene Fehlerklassen, Typen, Konstanten, Meldungstexte), liegt in dessen Modul, nicht im Kern. In den Kern kommt es erst, wenn ein zweites Feature es braucht.
 - **MUSS:** Abhängigkeiten zeigen nur nach innen. Features hängen vom Kern ab, nie umgekehrt. Features greifen nicht direkt aufeinander zu, sondern nur über definierte Schnittstellen oder Ereignisse.
 - **MUSS:** Features werden an genau einer zentralen Stelle registriert. Entfernen heißt: Registrierung entfernen, Modulordner löschen, Tests bleiben grün.
 
@@ -217,6 +218,7 @@ Leitsatz: **modular an den Grenzen, direkt im Kern.** Modularität zwischen Feat
 - **MUSS:** Die Architektur benennt die heißen Pfade (z. B. Spiel-Loop, Render-Schleife, Massenverarbeitung).
 - **SOLL:** In heißen Pfaden sind direkte Aufrufe, datenorientierter Aufbau, vorab reservierter Speicher und Caching erlaubt. Dort keine Ereignis-Busse, Serialisierung oder zusätzliche Schichten pro Durchlauf.
 - **MUSS:** Erst messen, dann optimieren. Heiße Pfade haben Benchmarks; eine Verschlechterung über das Ziel hinaus gilt als Fehler.
+- **MUSS:** Leistungstests in der CI prüfen mit Sicherheitsabstand (Richtwert: dreifacher Zielwert), weil gemeinsam genutzte CI-Rechner schwanken. Sie fangen grobe Verschlechterungen ab. Den genauen Zielwert misst die Prüfung auf Stufe C im Release auf einer festgelegten Umgebung.
 - **MUSS:** Optimierungen, die Lesbarkeit kosten, sind gekapselt, kommentiert und im Entscheidungslog begründet.
 - **SOLL:** In nicht kritischen Projekten geht Lesbarkeit vor Mikro-Optimierung. Offensichtliche Verschwendung (z. B. eine Datenbankabfrage pro Listeneintrag) ist trotzdem verboten.
 
@@ -245,10 +247,10 @@ Die KI schreibt und führt die Tests aus; *was* getestet wird, bestimmen die fre
 | --- | --- | --- |
 | **A** | Doku, Konfiguration, reine Umbenennungen | CI grün prüfen, Diff lesen |
 | **B** (Standard) | Normale Funktionen | Gezielte Proben: Randfälle, Feature tatsächlich entfernen, Regelwerk |
-| **C** | Benutzeroberfläche, kritische Logik (Geld, Personendaten, Sicherheit), Release | Wie B, dazu Mutationsproben an der kritischen Logik, die der Brief nennt, frischer Klon, volle Suite und End-to-End-Tests |
+| **C** | Benutzeroberfläche, kritische Logik (Geld, Personendaten, Sicherheit), Release | Wie B, dazu Bericht des Mutationstests lesen, frischer Klon, volle Suite und End-to-End-Tests |
 
 - **MUSS:** Eine Nachprüfung (nach Befunden oder nach einer zurückgegebenen Freigabe) prüft nur die Änderung seit der letzten Prüfung. Betrifft sie nur Doku oder Konfiguration, gilt Stufe A; sonst die Stufe der Aufgabe.
-- **MUSS:** Bei Stufe C nennt der Brief die kritische Logik, an der die QA Mutationsproben macht. Mutationsproben an anderer Stelle sind Verschwendung.
+- **MUSS:** Mutationstests macht ein Werkzeug, nicht die KI (z. B. mutmut für Python, cargo-mutants für Rust, Mull für C++). Es läuft als eigener CI-Job auf der kritischen Logik, deren Pfade im Stack-Profil stehen. Bei Stufe C nennt der Brief diese Logik; die QA liest den Bericht und meldet überlebende Mutanten als Befund. Mutationsproben von Hand gibt es nicht.
 
 ## 11. Git-Workflow
 
@@ -275,6 +277,7 @@ Sicherheit steht in der Rangfolge ganz oben. Diese Regeln gelten für alle Rolle
 - **MUSS:** Ist ein Secret ins Repository gelangt, wird es sofort ungültig gemacht und erneuert. Nur Löschen reicht nicht.
 - **MUSS:** Echte personenbezogene Daten nie in Entwicklung, Tests oder Prompts. Nur anonymisierte oder erfundene Daten.
 - **MUSS:** Jeder Zugang hat nur die minimal nötigen Rechte (Datenbanknutzer, API-Schlüssel, Berechtigungen der KI-Rollen).
+- **MUSS:** Die Befehle, die die Rollen für Bauen, Testen und Prüfen brauchen (z. B. Build-Werkzeuge, Paketmanager, die Shell des Zielsystems), stehen vorab in der Erlaubnisliste der Werkzeug-Einstellungen. Der SP trägt sie mit der Architektur ein, der Mensch gibt sie mit der ersten Freigabe frei. Eine abgelehnte Berechtigung kostet eine ganze Runde.
 
 **Code**
 
@@ -356,10 +359,11 @@ Die Grundformel ist versioniert und wird nur bewusst geändert.
 - Jedes Projekt vermerkt in seiner Kontextdatei die verwendete Version.
 - Abweichungen in einem einzelnen Projekt nur mit Eintrag im Entscheidungslog.
 - Wiederkehrende Probleme aus Projekten werden über den Koordinator als Änderungsvorschlag eingebracht; der Mensch entscheidet.
-- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v1.9`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
+- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v2.0`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
 
 **Versionsgeschichte**
 
+- **2.0** (10. November 2026): Erster vollständiger Projektlauf ausgewertet. Mutationstests per Werkzeug statt von Hand; benötigte Befehle vorab erlaubt und mit der ersten Freigabe freigegeben; was nur ein Feature braucht, liegt in dessen Modul; Leistungstests in der CI mit Sicherheitsabstand; in Klasse S höchstens eine Härtungsaufgabe.
 - **1.9** (10. November 2026): Auswertung eines weiteren Projektlaufs. Nachprüfungen prüfen nur die Änderung, reine Doku-Änderungen auf Stufe A; Mutationsproben der Stufe C nur an der kritischen Logik, die der Brief nennt; Vorlage der manuellen Prüfung mit durchgehender Nummerierung, einer Aktion pro Schritt und Hilfe, wenn etwas anders aussieht.
 - **1.8** (9. November 2026): Auswertung eines weiteren Projektlaufs. Threads beginnen sofort mit der Arbeit statt mit einer Statusrunde; Änderungswünsche immer in einem neuen PO-Thread (Phase `CHANGE`); in Klasse S etwa eine Aufgabe pro Funktion; QA-Stufe B ohne Mutationsproben; Prüfkriterien für Schalter und für Änderungen, die eine Freigabe berühren, fest im PO-Ablauf.
 - **1.7** (9. November 2026): Auswertung eines weiteren Projektlaufs. Was die Rollen bei jedem Schritt brauchen, steht jetzt auch in ihren Rollendateien: Pflichtinhalt der ersten Freigabe, Schalter für änderbare Funktionen, CI ohne Doku-Läufe. Neue Regel: Eine Prüfung, die nicht möglich ist, wird einmal gemeldet, dann stoppt die Rolle.

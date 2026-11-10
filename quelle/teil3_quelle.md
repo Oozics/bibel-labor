@@ -1,6 +1,6 @@
 # Teil 3: Referenzprojekt
 
-Das Referenzprojekt misst, ob eine neue Version der Bibel Kosten senkt, ohne Qualität oder Regeltreue zu verlieren. Es ist ein kleines Kassenbuch für die Kommandozeile mit zwei Funktionen und einem Änderungswunsch, Projektklasse S, und so gebaut, dass jede Regel der Bibel mindestens einmal greifen muss. Ziel: ein Lauf in etwa einer Stunde, unter 10 USD API-Gegenwert und innerhalb eines Nutzungsfensters des Abos. Der Lauf ist vollständig automatisiert: Ein Steuerungsskript im privaten Repository `bibel-labor` startet auf Knopfdruck in GitHub Actions alle Rollen, spielt mit kurzen Claude-Aufrufen den Auftraggeber (den **Entscheider**) nach festen Regeln, misst exakt und erstellt am Ende einen Prüfbericht als PDF. Du drückst den Knopf und liest den Bericht.
+Das Referenzprojekt misst, ob eine neue Version der Bibel Kosten senkt, ohne Qualität oder Regeltreue zu verlieren. Es ist ein kleines Kassenbuch für die Kommandozeile mit zwei Funktionen und einem Änderungswunsch, Projektklasse S, und so gebaut, dass jede Regel der Bibel mindestens einmal greifen muss. Maßstab ist der letzte gültige Lauf: Eine neue Version darf nicht mehr kosten als er, bei gleicher oder besserer Qualität und Regeltreue. Ziel ist außerdem ein Lauf innerhalb eines Nutzungsfensters des Abos. Der Lauf ist vollständig automatisiert: Ein Steuerungsskript im privaten Repository `bibel-labor` startet auf Knopfdruck in GitHub Actions alle Rollen, spielt mit kurzen Claude-Aufrufen den Auftraggeber (den **Entscheider**) nach festen Regeln, misst exakt und erstellt am Ende einen Prüfbericht als PDF. Du drückst den Knopf und liest den Bericht.
 
 ## 1. Aufbau des Messlaufs
 
@@ -48,19 +48,19 @@ Jede Regel der Bibel hat im Referenzprojekt einen Auslöser. Diese Tabelle ist z
 | R10 | `status.md` unter 100 Zeilen, Archiv | Mehr als fünf Übergaben im Lauf | `status.md` ≤ 100 Zeilen; bei mehr als fünf Übergaben `status-archive.md` gefüllt |
 | R11 | Ein Commit pro Aufgabe, nichts direkt auf `main` | Ganzer Lauf | `git log main`: Start-Commit plus ein Commit pro Aufgabe oder Phase, alle mit ID |
 | R12 | Feature-Schalter für Änderbares | F02 ist als änderbar markiert | F02 hat einen Ein/Aus-Schalter in der Konfiguration |
-| R13 | Feature sauber entfernbar | Änderungswunsch Ä1, Teil a: F02 entfernen | Diff berührt nur Modul, Registrierung, Tests und Doku; alle Tests grün |
+| R13 | Feature sauber entfernbar | Änderungswunsch Ä1, Teil a: F02 entfernen | Diff berührt nur Modul, Registrierung, Tests und Doku; alle Tests grün; Fehlerklassen und Texte von F02 lagen in dessen Modul |
 | R14 | Regel „berührt Freigabe“ | Ä1, Teil b: Speicher von JSON auf SQLite | SP markiert „touches gate“; QA prüft die Architekturänderung; der PO holt eine erneute Freigabe ein |
 | R15 | Adapter für Außenwelt | Ä1, Teil b | Diff des Speicherwechsels liegt fast nur im Speicher-Adapter und der Datenübernahme |
 | R16 | Konfiguration geprüft beim Start | `KASSENBUCH_DATA` | Ungültiger Pfad führt zu klarer Fehlermeldung, Test vorhanden |
-| R17 | Performance messen | Erfolgskriterium 100.000 Einträge | Benchmark-Test vorhanden und grün |
+| R17 | Performance messen | Erfolgskriterium 100.000 Einträge | Benchmark-Test vorhanden und grün; in der CI mit Sicherheitsabstand zum Zielwert |
 | R18 | Fehlerbehebung beginnt mit rotem Test | Jeder QA-Befund | Im Branch-Verlauf erst roter Test, dann Fix |
-| R19 | QA-Stufen | Gemischte Aufgaben | Stufe A/B/C im Brief, QA wiederholt die volle Suite nur bei C |
+| R19 | QA-Stufen | Gemischte Aufgaben | Stufe A/B/C im Brief, QA wiederholt die volle Suite nur bei C; Mutationstest als CI-Job mit Werkzeug, keine Mutationsproben von Hand; höchstens eine Härtungsaufgabe |
 | R20 | Keine CI für reine Doku | Phasen-Branches `PLAN`, `REL` | CI-Workflow mit `paths-ignore`; keine CI-Läufe für Doku-Commits |
 | R21 | Kein Abfragen der CI in Schleifen | Ganzer Lauf | Keine wiederholten CI-Abfragen in den Protokollen; Wartezeilen in `status.md` |
 | R22 | Push vor jeder Übergabe | Ganzer Lauf | Jede Übergabe nennt einen gepushten Branch; am Ende liegt kein Branch nur lokal |
 | R23 | Anleitung für die manuelle Prüfung | Aufgabe `REL` | `docs/manual-test.md` auf Deutsch, für Windows, ohne Entwicklerwissen ausführbar |
 | R24 | Freigaben nur ausdrücklich | Freigaben 1, 1b (nach Ä1), 3 | Kein Merge einer Phase ohne ausdrückliche Antwort des Entscheiders |
-| R25 | Sicherheitsregeln für Abhängigkeiten und CI | CI-Workflow, Entwicklungswerkzeuge (pytest, ruff, mypy), Eingabeprüfung | Actions per Commit-SHA eingebunden; Abhängigkeiten mit fixierter Version; Negativtests für ungültige Eingaben |
+| R25 | Sicherheitsregeln für Abhängigkeiten und CI | CI-Workflow, Entwicklungswerkzeuge (pytest, ruff, mypy), Eingabeprüfung | Actions per Commit-SHA eingebunden; Abhängigkeiten mit fixierter Version; Negativtests für ungültige Eingaben; benötigte Befehle in der Erlaubnisliste, Teil der ersten Freigabe |
 
 ## 4. Designdokument
 
@@ -221,7 +221,7 @@ Der Bericht ist auf Deutsch, für einen Leser ohne Entwicklerwissen. Ablage: `me
 
 Die Datei `messungen/ergebnisse.md` hält alle Läufe fest: eine Spalte pro Lauf, neue Läufe rechts. Das Skript nimmt die letzte gültige Spalte als Vergleichswert und trägt den neuen Lauf ein.
 
-| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 1.9 |
+| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 2.0 |
 | --- | --- | --- |
 | Datum | 1.–2. Nov. 2026 | |
 | Claude-Code-Version | 2.1.302 | |
