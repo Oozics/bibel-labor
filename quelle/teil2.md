@@ -1,6 +1,6 @@
 # Teil 2: Handbuch
 
-Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 2.0, gehört zur Grundformel 2.0. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
+Teil 2 enthält Vorlagen, Checklisten und Prompts zur Grundformel (Teil 1). Version 2.1, gehört zur Grundformel 2.1. Alles hier liegt fertig im **Vorlagen-Repository** (§21): jedes Kapitel als Datei in `docs/handbook/`, jede Vorlage in `docs/templates/` (Namen in §17), die Rollendateien in `docs/roles/` und die Werkzeug-Einstellungen in `.claude/`. Beim Projektstart wird nichts davon abgeschrieben oder übersetzt. Rollen lesen beim Thread-Start nur ihre kompakte Rollendatei; ein Handbuch-Kapitel schlagen sie nur gezielt nach, wenn die Aufgabe es verlangt (§19).
 
 ## 1. Regeln für das Designdokument
 
@@ -187,7 +187,7 @@ Grundformel version: <x.y>
 
 ```markdown
 # Role: Product Owner (PO)
-Grundformel version: 2.0
+Grundformel version: 2.1
 
 ## Mission
 Own the design document. Turn it into a specification and a backlog.
@@ -229,9 +229,9 @@ docs/tasks/, German gate summaries.
   feature; the scaffolding (core, config, CI) belongs to the first.
 - Feature marked "changeable": its QA check criteria include "switch
   it off in the config and run the tests".
-- QA level C: the check criteria name the critical logic covered by
-  the mutation test job (e.g. balance calculation, damage formula,
-  auth check).
+- QA level C in class M and L: the check criteria name the critical
+  logic covered by the mutation test job (e.g. balance calculation,
+  damage formula, auth check). Class S has no mutation test.
 - The last backlog task is always REL (release preparation).
 - Collect QA hints without findings; plan them as one hardening task
   from 5 hints or before REL. Class S: at most one, right before REL.
@@ -253,7 +253,8 @@ docs/tasks/, German gate summaries.
   after the gate. Never commit directly to main.
 
 ## Cost rules
-- One PO thread per phase or block. Then push, hand off and end.
+- One PO thread per phase or block, at most 3 tasks merged per
+  thread. Then push, hand off and end.
 - Context budget about a quarter of the context window.
 - Keep docs/status.md under 100 lines; move handoffs older than the
   last five to docs/status-archive.md.
@@ -277,7 +278,7 @@ the human.
 
 ```markdown
 # Role: Senior Programmer (SP)
-Grundformel version: 2.0
+Grundformel version: 2.1
 
 ## Mission
 Propose the architecture, fill the stack profile, then implement
@@ -314,8 +315,9 @@ decision log, changelog and CLAUDE.md where affected, handoff note.
 - Performance tests in CI assert with a safety margin (about 3x the
   target); the exact target is measured at level C in the release.
 - With the architecture: add the commands roles need to build, test
-  and check to the allow list in .claude/settings.json, and set up
-  the mutation test job for the critical paths in the stack profile.
+  and check to the allow list in .claude/settings.json. From class M:
+  set up the mutation test job with its threshold for the critical
+  paths in the stack profile.
 - Every bug fix starts with a failing test.
 - Before adding a library: check that it exists, is widely used and
   maintained. Install only via the official package manager, pinned.
@@ -340,6 +342,8 @@ decision log, changelog and CLAUDE.md where affected, handoff note.
   files instead of opening them whole.
 - Staged tests: affected area while working, full suite once before
   the handoff. Then CI is the proof.
+- No inline scripts in shell commands (no heredoc). Write helper
+  scripts to .scratch/ (git-ignored) and run them from there.
 - Never poll CI. After 2 failed attempts on one problem, stop.
 - If a required check cannot run (missing rights, tool unreachable):
   report it once with the cause and stop. Do not retry.
@@ -361,7 +365,7 @@ analysis and hand it to the PO.
 
 ```markdown
 # Role: Quality Assurance (QA)
-Grundformel version: 2.0
+Grundformel version: 2.1
 
 ## Mission
 Verify one task per thread independently. You never see the SP's
@@ -387,17 +391,21 @@ Write the result into the "Result" section of the task brief.
   A: CI green, read the diff.
   B (default): targeted probes - edge cases, actually remove the
      feature, rulebook compliance, security. No mutation probes.
-  C: as B, plus read the mutation test report (surviving mutants
-     on the named critical logic are findings), a fresh clone, full
-     suite and end-to-end tests. No hand-made mutation probes.
+  C: as B, plus a fresh clone, full suite and end-to-end tests; from
+     class M also the mutation test report (below the threshold is a
+     finding, surviving mutants above it are hints). No hand-made
+     mutation probes.
 - A re-check (after findings or a returned gate) checks only what
   changed since your last check: docs or config only -> level A;
   otherwise the brief's level.
-- Do not rerun the full suite at levels A and B; CI is the proof.
+- At levels A and B, rerun the full suite only if it takes under 2
+  minutes with filtered output; otherwise CI is the proof.
 - Red CI means no PASS.
 
 ## Cost rules
 - One thread = one task. Quiet output only. Never poll CI.
+- No inline scripts in shell commands (no heredoc); helper scripts
+  go to .scratch/ (git-ignored).
 - If a required check cannot run: report it once with the cause and
   stop. Do not retry.
 
@@ -418,7 +426,7 @@ Für spätere Einsätze als Schnittstelle nach außen. Der Koordinator ist die e
 
 ```markdown
 # Role: Coordinator
-Grundformel version: 2.0
+Grundformel version: 2.1
 
 ## Mission
 Set up projects from the template repository and act as the external
@@ -512,7 +520,7 @@ Die Datei liegt leer im Vorlagen-Repository; der SP füllt sie mit der Architekt
 ## Tooling
 - Test filter hook: interpreter command, test runners it covers:
 - Commands on the allow list (.claude/settings.json), with reason:
-- Mutation test tool, CI job and critical paths it covers:
+- Mutation test tool, CI job, critical paths and threshold (class M, L):
 
 ## Performance (if critical)
 - Hot paths:
@@ -885,7 +893,7 @@ PASS | FINDINGS – <date>
 - „Out of scope“ ist nie leer. Mindestens die naheliegendste Erweiterung wird ausgeschlossen.
 - Die QA-Prüfkriterien sind konkret. Sie stehen schon im Brief, damit der SP sie kennt und die erste Runde besteht.
 - Passt die Aufgabe nicht in einen SP-Thread, wird sie geteilt, bevor sie an den SP geht. Ist sie so klein, dass der Grundaufwand überwiegt, wird sie mit einer verwandten Aufgabe zusammengelegt.
-- Bei Stufe C nennen die QA-Prüfkriterien die kritische Logik, die der Mutationstest abdeckt (z. B. Saldoberechnung, Schadensformel, Anmeldeprüfung).
+- Ab Klasse M nennen die QA-Prüfkriterien bei Stufe C die kritische Logik, die der Mutationstest abdeckt (z. B. Saldoberechnung, Schadensformel, Anmeldeprüfung). In Klasse S gibt es keinen Mutationstest.
 - In Klasse S gibt es höchstens eine Härtungsaufgabe, direkt vor `REL`.
 - In Klasse S werden Themen optionaler Rollen (z. B. Sicherheit, Performance) als Prüfpunkte in die QA-Prüfkriterien geschrieben.
 - In Klasse S gilt etwa eine Aufgabe pro Funktion; das Grundgerüst gehört zur ersten Aufgabe.
@@ -1023,6 +1031,7 @@ dist/
 build/
 *.log
 data/local/
+.scratch/
 
 # OS and editor files
 .DS_Store
@@ -1289,6 +1298,6 @@ ki-projekt-vorlage/
   docs/tasks/                empty
 ```
 
-- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v2.0`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
+- **MUSS:** Eine neue Bibel-Version wird zuerst im Vorlagen-Repository umgesetzt und mit der Version getaggt (z. B. `v2.1`). Das PDF der Bibel ist die lesbare Fassung für den Menschen, das Vorlagen-Repository die Fassung für die Rollen. Beide haben immer dieselbe Version.
 - **MUSS:** Im Vorlagen-Repository gibt es keinen projektspezifischen Inhalt und keine Secrets.
 - **SOLL:** Das Vorlagen-Repository ist auf GitHub als „Template repository“ markiert, damit „Use this template“ verfügbar ist.

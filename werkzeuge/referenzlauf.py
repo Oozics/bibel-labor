@@ -30,7 +30,8 @@ LIMIT_SLEEP_S = 15 * 60           # wait between retries when the usage limit is
 MAX_ROUNDS_PER_PHASE = 15
 MAX_PHASES = 10
 STUCK_REPEATS = 3                 # identical client answers in a row = the role is stuck
-HELPER_MODEL = "sonnet"           # Decider answers, manual tester and report text (not part of the measurement)
+HELPER_MODEL = "sonnet"
+MESSAUFBAU = "M1"  # frozen measurement setup, Part 3 §2; change only with a new baseline           # Decider answers, manual tester and report text (not part of the measurement)
 ENV_DROP = ["CLAUDE_CODE_SESSION_ID", "CLAUDE_CODE_REMOTE_SESSION_ID", "CLAUDE_CODE_CHILD_SESSION"]
 
 
@@ -526,7 +527,7 @@ def column_values(m: dict) -> dict:
         "Regeltreue": f"{a.get('regeln_erfuellt', '–')} / {n_rules}",
         "Manuelle Prüfung (Minuten)": str(manual.get("geschaetzte_minuten_fuer_einen_menschen", "–")),
         "Tests, CI grün": f"{a.get('tests', '–')}, {'ja' if a.get('ci_gruen') else 'nein'}",
-        "Bemerkung": ("Abgebrochen: " + m["abbruch"]) if m["abbruch"] else f"Automatischer Lauf {m['lauf']}",
+        "Bemerkung": (f"Messaufbau {MESSAUFBAU} · " + (("Abgebrochen: " + m["abbruch"]) if m["abbruch"] else f"Automatischer Lauf {m['lauf']}")),
     }
 
 
@@ -544,7 +545,8 @@ def previous_column(path: Path) -> dict:
     _, header, rows, _ = read_table(path)
     for col in range(len(header) - 1, 0, -1):
         values = {r[0]: r[col] if col < len(r) else "" for r in rows}
-        if values.get("Kostenschätzung (USD)") and "abgebrochen" not in header[col]:
+        if (values.get("Kostenschätzung (USD)") and "abgebrochen" not in header[col]
+                and f"Messaufbau {MESSAUFBAU}" in values.get("Bemerkung", "")):
             return {"spalte": header[col], **values}
     return {}
 

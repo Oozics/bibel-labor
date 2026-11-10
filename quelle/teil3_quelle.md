@@ -28,7 +28,9 @@ Ein Lauf ist nur vergleichbar, wenn sich zwischen zwei Läufen nur die Bibel än
 - **Gleiche Entscheidungen:** Der Entscheider antwortet wörtlich nach Abschnitt 5, zum vorgesehenen Zeitpunkt. Jede seiner Entscheidungen steht im Protokoll (`entscheidungen.jsonl`).
 - **Gleiche Umgebung:** Windows-Rechner von GitHub Actions, derselbe Workflow, gleiche Claude-Code-Version wenn möglich (steht im Bericht), Modell aus den Projekteinstellungen, gleiche Berechtigungseinstellung. Abweichungen stehen im Bericht.
 - **Frisches Repository:** für jeden Lauf ein neues privates Repository `kassenbuch-<Version>-<Laufnummer>` aus dem Vorlagen-Repository.
-- **Schwankung:** KI-Läufe streuen. Unterschiede unter etwa zehn Prozent gelten nicht als Wirkung. Im Zweifel den Lauf wiederholen und den Mittelwert nehmen.
+- **Eingefrorener Messaufbau:** Skript, Designdokument, Entscheidungsregeln, Zeitpunkt des Änderungswunsches und Budgets bilden den Messaufbau mit einer Kennung (derzeit `M1`), die in jedem Bericht steht. Er wird nur geändert, wenn ein Fehler einen Lauf ungültig macht. Dann bekommt er eine neue Kennung, und der Basislauf wird damit wiederholt. Verglichen wird nur innerhalb derselben Kennung.
+- **Messlatte mit Streuung:** KI-Läufe streuen. Eine neue Messlatte entsteht aus zwei Läufen derselben Version unter identischen Bedingungen; ihr Abstand zeigt die Streuung. Ein Unterschied gilt erst als Wirkung, wenn er größer ist als diese Streuung, mindestens aber zehn Prozent.
+- **Wenige Änderungen pro Version:** Eine neue Version ändert nur ein kleines Bündel von Regeln, damit sich ein Effekt zuordnen lässt. Regeln kommen aus allgemeinen Gründen in die Bibel, nicht aus einer einzelnen Empfehlung eines Berichts; der Lauf zeigt vor allem, ob eine Änderung schadet.
 
 ## 3. Was das Projekt prüft
 
@@ -54,7 +56,7 @@ Jede Regel der Bibel hat im Referenzprojekt einen Auslöser. Diese Tabelle ist z
 | R16 | Konfiguration geprüft beim Start | `KASSENBUCH_DATA` | Ungültiger Pfad führt zu klarer Fehlermeldung, Test vorhanden |
 | R17 | Performance messen | Erfolgskriterium 100.000 Einträge | Benchmark-Test vorhanden und grün; in der CI mit Sicherheitsabstand zum Zielwert |
 | R18 | Fehlerbehebung beginnt mit rotem Test | Jeder QA-Befund | Im Branch-Verlauf erst roter Test, dann Fix |
-| R19 | QA-Stufen | Gemischte Aufgaben | Stufe A/B/C im Brief, QA wiederholt die volle Suite nur bei C; Mutationstest als CI-Job mit Werkzeug, keine Mutationsproben von Hand; höchstens eine Härtungsaufgabe |
+| R19 | QA-Stufen | Gemischte Aufgaben | Stufe A/B/C im Brief, volle Suite auf Stufe A/B nur, wenn sie unter zwei Minuten läuft; keine Mutationsproben von Hand und in Klasse S kein Mutationstest; höchstens eine Härtungsaufgabe |
 | R20 | Keine CI für reine Doku | Phasen-Branches `PLAN`, `REL` | CI-Workflow mit `paths-ignore`; keine CI-Läufe für Doku-Commits |
 | R21 | Kein Abfragen der CI in Schleifen | Ganzer Lauf | Keine wiederholten CI-Abfragen in den Protokollen; Wartezeilen in `status.md` |
 | R22 | Push vor jeder Übergabe | Ganzer Lauf | Jede Übergabe nennt einen gepushten Branch; am Ende liegt kein Branch nur lokal |
@@ -222,7 +224,7 @@ Der Bericht ist auf Deutsch, für einen Leser ohne Entwicklerwissen. Ablage: `me
 
 Die Datei `messungen/ergebnisse.md` hält alle Läufe fest: eine Spalte pro Lauf, neue Läufe rechts. Das Skript nimmt die letzte gültige Spalte als Vergleichswert und trägt den neuen Lauf ein.
 
-| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 2.0 |
+| Kennzahl | Bibel 1.4 (abgebrochen) | Bibel 2.1 |
 | --- | --- | --- |
 | Datum | 1.–2. Nov. 2026 | |
 | Claude-Code-Version | 2.1.302 | |

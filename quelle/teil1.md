@@ -232,7 +232,7 @@ Die KI schreibt und führt die Tests aus; *was* getestet wird, bestimmen die fre
 - **MUSS:** Kernlogik und Schnittstellen sind getestet. Eine Prozentzahl an Abdeckung ist kein Ziel an sich.
 - **MUSS:** Jede Fehlerbehebung beginnt mit einem Test, der den Fehler nachweist.
 - **MUSS:** Tests sind reproduzierbar: keine echten externen Dienste, Uhrzeit und Zufall kontrolliert, nur anonymisierte oder erfundene Testdaten.
-- **MUSS:** Tests laufen gestaffelt: Während der Arbeit nur der betroffene Bereich, vor der Übergabe einmal die volle Suite. Danach ist die CI der Nachweis.
+- **MUSS:** Tests laufen gestaffelt: Während der Arbeit nur der betroffene Bereich, vor der Übergabe einmal die volle Suite. Danach ist die CI der Nachweis. Die QA wiederholt die volle Suite nur, wenn sie mit gekürzter Ausgabe in unter zwei Minuten läuft; sonst gilt die CI.
 - **MUSS:** Vor jedem Merge laufen alle Tests. Ein roter Test blockiert den Merge. Gibt es keinen technischen Branch-Schutz, prüft der PO den CI-Status vor jedem Merge selbst und vermerkt ihn in der Übergabe.
 - **SOLL:** Sobald sinnvoll, laufen Tests automatisch bei jedem Push (CI). Reine Doku-Änderungen lösen keine CI aus. Solange noch keine CI existiert (Phasen vor dem ersten Code), ist für reine Doku-Branches kein CI-Nachweis nötig.
 
@@ -247,10 +247,10 @@ Die KI schreibt und führt die Tests aus; *was* getestet wird, bestimmen die fre
 | --- | --- | --- |
 | **A** | Doku, Konfiguration, reine Umbenennungen | CI grün prüfen, Diff lesen |
 | **B** (Standard) | Normale Funktionen | Gezielte Proben: Randfälle, Feature tatsächlich entfernen, Regelwerk |
-| **C** | Benutzeroberfläche, kritische Logik (Geld, Personendaten, Sicherheit), Release | Wie B, dazu Bericht des Mutationstests lesen, frischer Klon, volle Suite und End-to-End-Tests |
+| **C** | Benutzeroberfläche, kritische Logik (Geld, Personendaten, Sicherheit), Release | Wie B, dazu (ab Klasse M) Bericht des Mutationstests lesen, frischer Klon, volle Suite und End-to-End-Tests |
 
 - **MUSS:** Eine Nachprüfung (nach Befunden oder nach einer zurückgegebenen Freigabe) prüft nur die Änderung seit der letzten Prüfung. Betrifft sie nur Doku oder Konfiguration, gilt Stufe A; sonst die Stufe der Aufgabe.
-- **MUSS:** Mutationstests macht ein Werkzeug, nicht die KI (z. B. mutmut für Python, cargo-mutants für Rust, Mull für C++). Es läuft als eigener CI-Job auf der kritischen Logik, deren Pfade im Stack-Profil stehen. Bei Stufe C nennt der Brief diese Logik; die QA liest den Bericht und meldet überlebende Mutanten als Befund. Mutationsproben von Hand gibt es nicht.
+- **MUSS:** Ab Klasse M macht ein Werkzeug die Mutationstests, nicht die KI (z. B. mutmut für Python, cargo-mutants für Rust, Mull für C++). Es läuft als eigener CI-Job auf der kritischen Logik, deren Pfade im Stack-Profil stehen, zusammen mit einem Schwellenwert (Richtwert: 80 % erkannte Mutanten). Bei Stufe C nennt der Brief diese Logik und liest die QA den Bericht. Liegt das Ergebnis unter dem Schwellenwert, ist das ein Befund; überlebende Mutanten darüber sind Hinweise. In Klasse S gibt es keinen Mutationstest, weil sein Einrichten dort mehr kostet, als er bringt. Mutationsproben von Hand gibt es in keiner Klasse.
 
 ## 11. Git-Workflow
 
@@ -305,10 +305,11 @@ Ein Thread sendet bei **jedem** Arbeitsschritt (jeder Nachricht, jedem Werkzeuga
 **Kurze Verläufe, wenig Lesestoff**
 
 - **MUSS:** Kurzlebige Threads nach Abschnitt 3: ein Thread pro Arbeitseinheit, danach geschlossen.
-- **MUSS:** Kontext-Budget pro Thread, Richtwert ein Viertel des Kontextfensters des Modells. Ist es erreicht, schreibt die Rolle eine Übergabe und hört auf. Automatisches Komprimieren des Verlaufs ist kein Ersatz, weil es Details verliert und weiter Kosten erzeugt.
+- **MUSS:** Kontext-Budget pro Thread, Richtwert ein Viertel des Kontextfensters des Modells. Ist es erreicht, schreibt die Rolle eine Übergabe und hört auf. Weil eine Rolle ihren Kontext nicht selbst messen kann, gilt zusätzlich eine zählbare Grenze: Ein PO-Thread bringt höchstens drei Aufgaben zum Merge. Automatisches Komprimieren des Verlaufs ist kein Ersatz, weil es Details verliert und weiter Kosten erzeugt.
 - **MUSS:** Wo das Werkzeug es kann, startet der PO SP und QA als Subagenten mit eigenem Kontext. Zum PO kommt nur ihre kurze Abschlussmeldung zurück, nicht ihr Arbeitsverlauf.
 - **MUSS:** Beim Start liest eine Rolle nur Kontextdatei, Status, Rollendatei, ihre Aufgabe und die betroffenen Dateien. Handbuch-Kapitel und Grundformel werden nur gezielt nachgeschlagen, wenn die Aufgabe es verlangt. Keine ganzen Ordner „zur Sicherheit“.
 - **MUSS:** Rollendateien bleiben kurz (Richtwert eine Seite), weil sie bei jedem Schritt mitgesendet werden.
+- **MUSS:** Keine Skripte inline in Shell-Befehlen (z. B. per Heredoc). Hilfsskripte werden als Datei in einen von Git ignorierten Ordner `.scratch/` geschrieben und von dort ausgeführt. So lassen sie sich freigeben, nachlesen und wiederverwenden.
 
 **Wenige Schritte**
 
@@ -359,10 +360,11 @@ Die Grundformel ist versioniert und wird nur bewusst geändert.
 - Jedes Projekt vermerkt in seiner Kontextdatei die verwendete Version.
 - Abweichungen in einem einzelnen Projekt nur mit Eintrag im Entscheidungslog.
 - Wiederkehrende Probleme aus Projekten werden über den Koordinator als Änderungsvorschlag eingebracht; der Mensch entscheidet.
-- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v2.0`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
+- **MUSS:** Jede neue Version wird im Vorlagen-Repository umgesetzt und dort mit der Versionsnummer getaggt (z. B. `v2.1`). Laufende Projekte bleiben auf ihrer Version, außer der Mensch entscheidet anders.
 
 **Versionsgeschichte**
 
+- **2.1** (10. November 2026): Vereinfachung nach einem weiteren Projektlauf. Mutationstest erst ab Klasse M und mit Schwellenwert; höchstens drei Aufgaben pro PO-Thread; die QA wiederholt die volle Suite nur, wenn sie schnell läuft; Hilfsskripte als Datei statt inline.
 - **2.0** (10. November 2026): Erster vollständiger Projektlauf ausgewertet. Mutationstests per Werkzeug statt von Hand; benötigte Befehle vorab erlaubt und mit der ersten Freigabe freigegeben; was nur ein Feature braucht, liegt in dessen Modul; Leistungstests in der CI mit Sicherheitsabstand; in Klasse S höchstens eine Härtungsaufgabe.
 - **1.9** (10. November 2026): Auswertung eines weiteren Projektlaufs. Nachprüfungen prüfen nur die Änderung, reine Doku-Änderungen auf Stufe A; Mutationsproben der Stufe C nur an der kritischen Logik, die der Brief nennt; Vorlage der manuellen Prüfung mit durchgehender Nummerierung, einer Aktion pro Schritt und Hilfe, wenn etwas anders aussieht.
 - **1.8** (9. November 2026): Auswertung eines weiteren Projektlaufs. Threads beginnen sofort mit der Arbeit statt mit einer Statusrunde; Änderungswünsche immer in einem neuen PO-Thread (Phase `CHANGE`); in Klasse S etwa eine Aufgabe pro Funktion; QA-Stufe B ohne Mutationsproben; Prüfkriterien für Schalter und für Änderungen, die eine Freigabe berühren, fest im PO-Ablauf.
