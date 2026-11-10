@@ -1,0 +1,35 @@
+{
+ "version": "2.0",
+ "lauf": "42843123761",
+ "repository": "kassenbuch-2-0-42843123761",
+ "datum": "2026-11-10",
+ "claude_code": "2.1.322 (Claude Code)",
+ "vorlage_commit": "9a35f02e4493331f10f8f0318fe269c2b1be2b47",
+ "tokens": 25945593,
+ "kosten_usd": 21.98,
+ "kosten_rollen": {
+  "Koordinator": 0.25,
+  "PO": 21.73
+ },
+ "hilfskosten_usd": 1.21,
+ "schritte": 112,
+ "sitzungen": 7,
+ "aktive_minuten": 91,
+ "limit_wartezeit_min": 210,
+ "rueckfragen": 5,
+ "unvorhergesehen": 6,
+ "abgelehnte_berechtigungen": 3,
+ "aenderungswunsch_gesendet": true,
+ "manuelle_pruefung": null,
+ "abbruch": "Kostenbremse: Projekt-Sitzungen über 20.0 USD",
+ "audit": {
+  "regeln_erfuellt": 22,
+  "regeln_gesamt": 25,
+  "aufgaben": 7,
+  "erstdurchlauf_prozent": 57,
+  "qa_runden": 11,
+  "echte_befunde": 5,
+  "tests": 358,
+  "ci_gruen": true
+ }
+}
