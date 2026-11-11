@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 3472,
+ "stop_reason": "end_turn",
+ "session_id": "6ad918c9-5691-4187-aa07-218285a6f8ae",
+ "total_cost_usd": 0.0200904,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 4118,
+  "cache_read_input_tokens": 2244,
+  "output_tokens": 339,
+  "output_tokens_details": {
+   "thinking_tokens": 160
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 4118,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 339,
+    "cache_read_input_tokens": 2244,
+    "cache_creation_input_tokens": 4118,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4118
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 339,
+   "cacheReadInputTokens": 2244,
+   "cacheCreationInputTokens": 4118,
+   "webSearchRequests": 0,
+   "costUSD": 0.0200904,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 160,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 4118,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\":\"antworten\",\"antwort\":\"Entscheide nach bestem Ermessen und vermerke es im Designdokument.\",\"naechste_phase\":null,\"anzahl_fragen\":2,\"unvorhergesehen\":true,\"freigabe\":\"keine\",\"notiz\":\"Zwei Fragen (führende Nullen, Excel-Formelschutz) stehen nicht in den Regeln und betreffen weder Rollen, Projektklasse noch personenbezogene Daten, daher Standardantwort Ermessen.\"}",
+ "ttft_ms": 2655,
+ "type": "result",
+ "duration_ms": 3669,
+ "uuid": "6a92f9da-4bfe-4447-80d9-6c74aa3b75fc",
+ "ttft_stream_ms": 1408,
+ "time_to_request_ms": 196,
+ "first_content_frame_ms": 1408,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 4.9
+}

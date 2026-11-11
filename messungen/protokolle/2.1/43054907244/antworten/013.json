@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 844792,
+ "stop_reason": "end_turn",
+ "session_id": "01cf5612-cec7-41da-9f40-0cbf30cb9860",
+ "total_cost_usd": 4.854051600000001,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 2831,
+  "cache_read_input_tokens": 227841,
+  "output_tokens": 1875,
+  "output_tokens_details": {
+   "thinking_tokens": 463
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 2831,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 779,
+    "cache_read_input_tokens": 46591,
+    "cache_creation_input_tokens": 463,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 463
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5": {
+   "inputTokens": 226,
+   "outputTokens": 95448,
+   "thinkingTokens": 23181,
+   "cacheReadInputTokens": 7500068,
+   "cacheCreationInputTokens": 269075,
+   "cacheCreationEphemeral5mInputTokens": 236142,
+   "cacheCreationEphemeral1hInputTokens": 32933,
+   "webSearchRequests": 0,
+   "costUSD": 4.854051600000001,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 5,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Ich habe es selbst geprüft und keinen Fehler auf unserer Seite gefunden. Die beiden Läufe warten weiter darauf, dass GitHub ihnen einen Rechner zuteilt.\n\n- **Läufe:** T004 wartet um 20:42 UTC seit rund 14 Minuten, T005 seit rund 3 Minuten. Beide stehen auf „queued“, und noch keinem Job ist ein Rechner zugeteilt.\n- **Repository:** GitHub Actions ist eingeschaltet, alle Actions sind erlaubt. Der Workflow ist unverändert und braucht wie bisher `windows-latest`. Bei T003 lief er heute Nachmittag in 44 Sekunden durch.\n- **GitHub-Status:** Actions meldet „operational“, es gibt keine offene Störung.\n- **Konto:** Abrechnung und Minutenkontingent konnte ich nicht einsehen, der Zugangsschlüssel hat dafür keine Rechte (HTTP 403).\n\nAm wahrscheinlichsten hat GitHub gerade zu wenige Windows-Rechner frei, oder das Konto ist ausgelastet: Läufe in anderen Repositories desselben Kontos können die erlaubte Zahl gleichzeitiger Jobs belegen. Ist das Kontingent oder Ausgabenlimit erschöpft, bleibt es ebenfalls bei „queued“. Das kann nur jemand mit Zugang zu den Kontoeinstellungen prüfen.\n\nEin Neustart hilft nicht, solange die Läufe in der Warteschlange stehen. Laufen sie an, kann der nächste PO-Thread die CI einmal prüfen und dann T004 und T005 nach `main` übernehmen. Ich prüfe nicht in einer Schleife nach. Wenn Sie wollen, schaue ich in etwa 20 Minuten noch genau einmal.",
+ "ttft_ms": 1731,
+ "type": "result",
+ "duration_ms": 27079,
+ "uuid": "d3d8b380-26f7-4773-8992-16da80de51d7",
+ "ttft_stream_ms": 1191,
+ "time_to_request_ms": 472,
+ "first_content_frame_ms": 1191,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 28.3
+}

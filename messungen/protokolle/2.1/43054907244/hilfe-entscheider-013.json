@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 7473,
+ "stop_reason": "end_turn",
+ "session_id": "f63a6a1a-e1d9-4997-8e98-1c367804b612",
+ "total_cost_usd": 0.019806400000000002,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 4007,
+  "cache_read_input_tokens": 2244,
+  "output_tokens": 355,
+  "output_tokens_details": {
+   "thinking_tokens": 210
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 4007,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 355,
+    "cache_read_input_tokens": 2244,
+    "cache_creation_input_tokens": 4007,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4007
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 355,
+   "cacheReadInputTokens": 2244,
+   "cacheCreationInputTokens": 4007,
+   "webSearchRequests": 0,
+   "costUSD": 0.019806400000000002,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 210,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 4007,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\":\"antworten\",\"antwort\":\"Bitte prüf das selbst.\",\"naechste_phase\":null,\"anzahl_fragen\":1,\"unvorhergesehen\":false,\"freigabe\":\"keine\",\"notiz\":\"Die Rolle meldet wartende CI-Läufe und bietet eine weitere Prüfung an, daher die Regelantwort für die Bitte, CI oder Merge zu prüfen.\"}",
+ "ttft_ms": 6685,
+ "type": "result",
+ "duration_ms": 7668,
+ "uuid": "61f3fc82-b471-4631-9bd6-75d16d791534",
+ "ttft_stream_ms": 4991,
+ "time_to_request_ms": 194,
+ "first_content_frame_ms": 4991,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 8.7
+}

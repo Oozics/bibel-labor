@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 5009,
+ "stop_reason": "end_turn",
+ "session_id": "bfd31e56-9320-46a3-bcf2-dd4b78d08caf",
+ "total_cost_usd": 0.0211544,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 3869,
+  "cache_read_input_tokens": 2244,
+  "output_tokens": 545,
+  "output_tokens_details": {
+   "thinking_tokens": 379
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 3869,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 545,
+    "cache_read_input_tokens": 2244,
+    "cache_creation_input_tokens": 3869,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 3869
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 545,
+   "cacheReadInputTokens": 2244,
+   "cacheCreationInputTokens": 3869,
+   "webSearchRequests": 0,
+   "costUSD": 0.0211544,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 379,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 3869,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"aktion\":\"antworten\",\"antwort\":\"Entscheide nach bestem Ermessen und vermerke es im Designdokument.\",\"naechste_phase\":null,\"anzahl_fragen\":1,\"unvorhergesehen\":true,\"freigabe\":\"keine\",\"notiz\":\"CI hängt wegen fehlender Runner; Abrechnung bzw. Merge ohne CI bei Code steht nicht in den Regeln, daher Standardantwort für Unvorhergesehenes.\"}",
+ "ttft_ms": 4270,
+ "type": "result",
+ "duration_ms": 5236,
+ "uuid": "0edd0c36-c1a2-4e40-82f0-fcfcf4f3f15e",
+ "ttft_stream_ms": 1424,
+ "time_to_request_ms": 226,
+ "first_content_frame_ms": 1424,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 6.3
+}

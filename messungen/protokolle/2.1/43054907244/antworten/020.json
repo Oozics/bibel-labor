@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 47016,
+ "stop_reason": "end_turn",
+ "session_id": "5d9d143d-306a-41d6-9e2f-7f6cbce5898c",
+ "total_cost_usd": 0.2538488,
+ "usage": {
+  "input_tokens": 6,
+  "cache_creation_input_tokens": 2470,
+  "cache_read_input_tokens": 97391,
+  "output_tokens": 1749,
+  "output_tokens_details": {
+   "thinking_tokens": 392
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 2470,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1072,
+    "cache_read_input_tokens": 33382,
+    "cache_creation_input_tokens": 654,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 654
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5": {
+   "inputTokens": 20,
+   "outputTokens": 4251,
+   "thinkingTokens": 716,
+   "cacheReadInputTokens": 279384,
+   "cacheCreationInputTokens": 14109,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 14109,
+   "webSearchRequests": 0,
+   "costUSD": 0.2538488,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 3,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Ich habe es geprüft. Die Ursache konnte ich nur eingrenzen, nicht feststellen. Bei der Abrechnung komme ich nicht weiter, weil mir der Zugang fehlt.\n\n**Was ich sehen konnte (20:46 UTC):**\n- **Actions ist im Repository eingeschaltet**, alle Actions sind erlaubt. Daran liegt es nicht.\n- **Bei GitHub selbst gibt es keine Störung:** Die Statusseite meldet Actions als „operational“.\n- **Beide CI-Läufe hängen weiter auf „queued“.** Für T005 wurde kein einziger Job angelegt. GitHub teilt also keinen Rechner zu.\n- **Mein Status-Commit hat keinen neuen Lauf ausgelöst**, weil er nur Dokumentation ändert. Es hängen also nur diese zwei Läufe.\n\n**Was ich nicht prüfen kann:**\n- Die Actions-Minuten und das Ausgabenlimit. Die Abrechnung ist für meinen Zugangsschlüssel gesperrt (Fehler 403). Das kann nur jemand mit Kontozugang unter GitHub → Settings → Billing einsehen.\n\n**Warum ich trotzdem die Minuten vermute:**\n- Das Repository ist privat, und die CI läuft auf Windows. Dort zählt jede Minute doppelt, also sind die Freiminuten schnell aufgebraucht.\n- Am Nachmittag liefen dieselben Läufe noch problemlos.\n\n**Ihre Entscheidung:**\n1. Sie schauen unter Settings → Billing nach den Minuten und dem Ausgabenlimit und erhöhen es bei Bedarf. Danach starte ich die beiden Läufe einmal neu, wenn Sie das wünschen.\n2. Oder ich breche die beiden Läufe jetzt ab und starte sie sofort neu, als Versuch, ob sie nur hängen geblieben sind. Wenn die Minuten tatsächlich aufgebraucht sind, ändert das nichts.\n\nZusammengeführt wird erst, wenn die CI grün ist.",
+ "ttft_ms": 2035,
+ "type": "result",
+ "duration_ms": 25172,
+ "uuid": "60c7b941-d8c9-41e9-8469-4635edb77db7",
+ "ttft_stream_ms": 1167,
+ "time_to_request_ms": 468,
+ "first_content_frame_ms": 1167,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "_wall_s": 26.4
+}
